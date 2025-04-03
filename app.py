@@ -35,10 +35,10 @@ def signup():
 
 
 
-@app.route("/", methods=["GET","POST"])
+@app.route("/login", methods=["GET","POST"])
 def login():
     if request.method == "GET":
-        return render_template("index.html")
+        return render_template("login.html")
     else:
             con = sqlite3.connect("login.db")
             cur = con.cursor()
@@ -60,7 +60,7 @@ def password():
         if "username" in session:
             return render_template("password.html")
         else:
-            return render_template("index.html")
+            return render_template("login.html")
      else:
         con = sqlite3.connect("login.db")
         cur = con.cursor()
@@ -79,7 +79,42 @@ def welcome():
 @app.route("/logout")
 def logout():
      session.pop("username", None)
-     return render_template("index.html")
+     return render_template("login.html")
+
+@app.route("/")
+def home():
+     return render_template("homepage.html")
+
+@app.route("/doctors")
+def doctors():
+     return render_template("pages/doctors.html")
+
+@app.route("/appointment")
+def appointment():
+     return render_template("pages/appointment.html")
+
+@app.route("/assistant")
+def assistant():
+     return render_template("pages/assistant.html")
+
+@app.route("/contact")
+def contact():
+     return render_template("pages/contact.html")
+
+@app.route("/reviews")
+def reviews():
+     return render_template("pages/reviews.html") 
+
+@app.route("/services")
+def services():
+     return render_template("pages/services.html")
+
+
+
+
+
+
+
 if __name__ == "__main__":
     app.run(debug = True)
 
