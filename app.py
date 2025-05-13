@@ -109,6 +109,9 @@ def reviews():
 def services():
      return render_template("pages/services.html")
 
+@app.route("/allreviews")
+def allreviews():
+     return render_template("pages/allreviews.html")
 
 
 
