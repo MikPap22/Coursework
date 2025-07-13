@@ -19,7 +19,7 @@ con.close()
 @app.route("/signup", methods=["GET","POST"])
 def signup():
     if request.method == "GET":
-        return render_template("signup.html")
+        return render_template("authorisedUsers/signup.html")
     else:
         
         con = sqlite3.connect("login.db")
@@ -38,7 +38,7 @@ def signup():
 @app.route("/login", methods=["GET","POST"])
 def login():
     if request.method == "GET":
-        return render_template("login.html")
+        return render_template("authorisedUsers/login.html")
     else:
             con = sqlite3.connect("login.db")
             cur = con.cursor()
@@ -50,7 +50,7 @@ def login():
             print(user)
             if user:
                  session["username"] = request.form["username"]
-                 return render_template("welcome.html")
+                 return render_template("pages/reviews.html")
             else:
                 return "login failed"
 
@@ -58,9 +58,9 @@ def login():
 def password():
      if request.method == "GET":
         if "username" in session:
-            return render_template("password.html")
+            return render_template("authorisedUsers/password.html")
         else:
-            return render_template("login.html")
+            return render_template("authorisedUsers/login.html")
      else:
         con = sqlite3.connect("login.db")
         cur = con.cursor()
@@ -74,12 +74,12 @@ def password():
 
 @app.route("/w")
 def welcome():
-     return render_template("welcome.html")
+     return render_template("authorisedUsers/welcome.html")
 
 @app.route("/logout")
 def logout():
      session.pop("username", None)
-     return render_template("login.html")
+     return render_template("authorisedUsers/login.html")
 
 @app.route("/")
 def home():
@@ -103,7 +103,12 @@ def contact():
 
 @app.route("/reviews")
 def reviews():
-     return render_template("pages/reviews.html") 
+     if request.method == "GET":
+        if "username" in session:
+            return render_template("authorisedUsers/reviews.html")
+        else:
+            return render_template("authorisedUsers/login.html")
+     
 
 @app.route("/services")
 def services():
