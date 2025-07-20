@@ -165,12 +165,38 @@
     form .btn button:hover{
         background: #1b1b1b;
     }
+
+    .action-buttons {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.btn-link {
+    padding: 10px 20px;
+    background-color: #28A251;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.btn-link:hover {
+    background-color: #1e7a3c;
+}
+
     </style>
 </head>
 <body>
 <h1>Your Review</h1>
 
-
+<div class="action-buttons">
+    <a href="/password" class="btn-link">Change Password</a>
+    <a href="/logout" class="btn-link">Logout</a>
+</div>
 
 
 
@@ -190,15 +216,44 @@
             <label for="rate-2" class ="fas fa-star"></label>
             <input type="radio" name ="rate" id="rate-1">
             <label for="rate-1" class ="fas fa-star"></label>
-            <form action="#">
-                <header></header>
-                <div class="textarea">
-                    <textarea cols ="30" placeholder = "Describe your experience.."></textarea>
-                </div>
-                <div class="btn">
-                    <button type = "submit">Post</button>
-                </div>
-            </form>
+            
+            <form action="/reviews" method="POST">
+
+    <header></header>
+
+    <input type="radio" name="rating" id="rate-5" value="5">
+
+    <label for="rate-5" class="fas fa-star"></label>
+
+    <input type="radio" name="rating" id="rate-4" value="4">
+
+    <label for="rate-4" class="fas fa-star"></label>
+
+    <input type="radio" name="rating" id="rate-3" value="3">
+
+    <label for="rate-3" class="fas fa-star"></label>
+
+    <input type="radio" name="rating" id="rate-2" value="2">
+
+    <label for="rate-2" class="fas fa-star"></label>
+
+    <input type="radio" name="rating" id="rate-1" value="1">
+
+    <label for="rate-1" class="fas fa-star"></label>
+
+    <div class="textarea">
+
+        <textarea name="comment" cols="30" placeholder="Describe your experience.." required></textarea>
+
+    </div>
+
+    <div class="btn">
+
+        <button type="submit">Post</button>
+
+    </div>
+
+</form>
         </div>
     </div>
 

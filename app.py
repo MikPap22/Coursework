@@ -18,6 +18,16 @@ cur.execute(""" CREATE TABLE IF NOT EXISTS Users (
 con.commit()
 con.close()
 
+con = sqlite3.connect("review.db")
+cur = con.cursor()
+cur.execute(""" CREATE TABLE IF NOT EXISTS Reviews ( 
+                ReviewID INTEGER PRIMARY KEY AUTOINCREMENT,
+                UserName VARCHAR(10) NOT NULL FOREIGN KEY,
+                Comment VARCHAR(1000) NOT NULL,
+                StarRating INTEGER NOT NULL
+                )""")
+con.commit()
+con.close() 
 
 @app.route("/signup", methods=["GET","POST"])
 def signup():
@@ -110,8 +120,7 @@ def reviews():
         if "username" in session:
             return render_template("authorisedUsers/reviews.html")
         else:
-            return render_template("authorisedUsers/login.html")
-     
+            return render_template("authorisedUsers/login.html")    
 
 @app.route("/services")
 def services():
