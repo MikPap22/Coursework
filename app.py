@@ -10,7 +10,10 @@ con = sqlite3.connect("login.db")
 cur = con.cursor()
 cur.execute(""" CREATE TABLE IF NOT EXISTS Users ( 
                 UserName VARCHAR(10) NOT NULL PRIMARY KEY,
-                UserPassword VARCHAR(20) NOT NULL
+                UserFirstName VARCHAR(30) NOT NULL,
+                UserSurname VARCHAR(30) NOT NULL, 
+                UserEmail VARCHAR(30) NOT NULL,    
+                UserPassword VARCHAR(20) NOT NULL 
                 )""")
 con.commit()
 con.close()
@@ -25,9 +28,9 @@ def signup():
         con = sqlite3.connect("login.db")
         cur = con.cursor()
         hash=hashlib.sha256(request.form["password"].encode()).hexdigest()
-        cur.execute(""" INSERT INTO Users(UserName, UserPassword)
-            VALUES (?,?)""", 
-            (request.form["username"], hash))
+        cur.execute(""" INSERT INTO Users(UserName, UserFirstName, UserSurname, UserEmail, UserPassword)
+            VALUES (?, ?, ?, ?, ?)""", 
+            (request.form["username"],request.form["userfirstname"], request.form["usersurname"], request.form["useremail"],hash))
         con.commit()
         con.close()
 
