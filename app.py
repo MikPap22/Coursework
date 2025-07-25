@@ -6,7 +6,7 @@ import hashlib
 app = Flask(__name__)
 app.secret_key = "random"
 
-con = sqlite3.connect("login.db")
+con = sqlite3.connect("main.db")
 cur = con.cursor()
 cur.execute(""" CREATE TABLE IF NOT EXISTS Users ( 
                 UserName VARCHAR(10) NOT NULL PRIMARY KEY,
@@ -15,11 +15,8 @@ cur.execute(""" CREATE TABLE IF NOT EXISTS Users (
                 UserEmail VARCHAR(30) NOT NULL,    
                 UserPassword VARCHAR(20) NOT NULL 
                 )""")
-con.commit()
-con.close()
 
-con = sqlite3.connect("review.db")
-cur = con.cursor()
+
 cur.execute(""" CREATE TABLE IF NOT EXISTS Reviews ( 
                 ReviewID INTEGER PRIMARY KEY AUTOINCREMENT,
                 UserName VARCHAR(10) NOT NULL,
@@ -36,7 +33,7 @@ def signup():
         return render_template("authorisedUsers/signup.html")
     else:
         
-        con = sqlite3.connect("login.db")
+        con = sqlite3.connect("main.db")
         cur = con.cursor()
         hash=hashlib.sha256(request.form["password"].encode()).hexdigest()
         cur.execute(""" INSERT INTO Users(UserName, UserFirstName, UserSurname, UserEmail, UserPassword)
@@ -54,7 +51,7 @@ def login():
     if request.method == "GET":
         return render_template("authorisedUsers/login.html")
     else:
-            con = sqlite3.connect("login.db")
+            con = sqlite3.connect("main.db")
             cur = con.cursor()
             hash=hashlib.sha256(request.form["password"].encode()).hexdigest()
             cur.execute(" SELECT * FROM Users WHERE UserName = ? AND UserPassword = ?",
@@ -76,7 +73,7 @@ def password():
         else:
             return render_template("authorisedUsers/login.html")
      else:
-        con = sqlite3.connect("login.db")
+        con = sqlite3.connect("main.db")
         cur = con.cursor()
         hash=hashlib.sha256(request.form["password"].encode()).hexdigest()
         cur.execute(""" UPDATE Users SET UserPassword=? WHERE UserName=?""",
@@ -139,7 +136,7 @@ def allreviews():
         comment = request.form.get("comment")
         username = session["username"]
 
-        con = sqlite3.connect("login.db")
+        con = sqlite3.connect("main.db")
         cur = con.cursor()
         cur.execute("SELECT UserFirstName, UserSurname FROM Users WHERE UserName=?", (username,))
         result = cur.fetchone()
@@ -147,7 +144,7 @@ def allreviews():
 
         fname, lname = result if result else ("Unknown", "User")
 
-        con = sqlite3.connect("review.db")
+        con = sqlite3.connect("main.db")
         cur = con.cursor()
         cur.execute("""INSERT INTO Reviews (UserName, UserFirstName, UserSurname, Comment, StarRating)
                        VALUES (?, ?, ?, ?, ?)""",
@@ -155,14 +152,17 @@ def allreviews():
         con.commit()
         con.close()
 
-        return render_template("pages/allreviews.html")  # Refresh the page after posting
+        return render_template("pages/allreviews.html")  
 
     else:
 
-        con = sqlite3.connect("review.db")
+        con = sqlite3.connect("main.db")
         con.row_factory = sqlite3.Row
         cur = con.cursor()
-        cur.execute("SELECT * FROM Reviews ORDER BY ReviewID DESC")
+        cur.execute("""SELECT Users.UserFirstName, Reviews.StarRating, Reviews.Comment 
+                   FROM Reviews, Users
+                   WHERE (Reviews.UserName = Users.UserName) 
+                   ORDER BY ReviewID DESC""")
         reviews = cur.fetchall()
         con.close()
 
