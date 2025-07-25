@@ -37,4 +37,57 @@
 <div>
     <button onclick="window.location.href='/signup';">Your Review</button>
 </div> 
+
+{% if reviews %}
+
+    <h2 style="margin-top: 30px;">All Reviews</h2>
+
+    <table border="1" cellpadding="10" style="margin-top:10px;">
+
+        <thead>
+
+            <tr>
+
+                <th>Name</th>
+
+                <th>Rating</th>
+
+                <th>Comment</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            {% for review in reviews %}
+
+                <tr>
+
+                    <td>{{ review['UserFirstName'] }} {{ review['UserSurname'] }}</td>
+
+                    <td>{{ review['StarRating'] }} ⭐</td>
+
+                    <td>{{ review['Comment'] }}</td>
+
+                </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+{% else %}
+
+    <p>No reviews yet.</p>
+
+{% endif %}
+
+
+
+
+
+
+
 </body>

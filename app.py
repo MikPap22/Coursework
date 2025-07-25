@@ -22,9 +22,10 @@ con = sqlite3.connect("review.db")
 cur = con.cursor()
 cur.execute(""" CREATE TABLE IF NOT EXISTS Reviews ( 
                 ReviewID INTEGER PRIMARY KEY AUTOINCREMENT,
-                UserName VARCHAR(10) NOT NULL FOREIGN KEY,
+                UserName VARCHAR(10) NOT NULL,
                 Comment VARCHAR(1000) NOT NULL,
-                StarRating INTEGER NOT NULL
+                StarRating INTEGER NOT NULL,
+                FOREIGN KEY (UserName) REFERENCES Users(UserName)
                 )""")
 con.commit()
 con.close() 
@@ -128,7 +129,45 @@ def services():
 
 @app.route("/allreviews")
 def allreviews():
-     return render_template("pages/allreviews.html")
+
+    if request.method == "POST":
+
+        if "username" not in session:
+            return render_template("pages/login.html")
+ 
+        rating = request.form.get("rating")
+        comment = request.form.get("comment")
+        username = session["username"]
+
+        con = sqlite3.connect("login.db")
+        cur = con.cursor()
+        cur.execute("SELECT UserFirstName, UserSurname FROM Users WHERE UserName=?", (username,))
+        result = cur.fetchone()
+        con.close()
+
+        fname, lname = result if result else ("Unknown", "User")
+
+        con = sqlite3.connect("review.db")
+        cur = con.cursor()
+        cur.execute("""INSERT INTO Reviews (UserName, UserFirstName, UserSurname, Comment, StarRating)
+                       VALUES (?, ?, ?, ?, ?)""",
+                    (username, fname, lname, comment, int(rating)))
+        con.commit()
+        con.close()
+
+        return render_template("pages/allreviews.html")  # Refresh the page after posting
+
+    else:
+
+        con = sqlite3.connect("review.db")
+        con.row_factory = sqlite3.Row
+        cur = con.cursor()
+        cur.execute("SELECT * FROM Reviews ORDER BY ReviewID DESC")
+        reviews = cur.fetchall()
+        con.close()
+
+        return render_template("pages/allreviews.html", reviews=reviews)
+
 
 
 
