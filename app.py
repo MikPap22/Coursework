@@ -112,14 +112,25 @@ def assistant():
 def contact():
      return render_template("pages/contact.html")
 
-@app.route("/reviews")
+@app.route("/reviews", methods=["GET", "POST"])
 def reviews():
-     if request.method == "GET":
-        if "username" in session:
-            return render_template("authorisedUsers/reviews.html")
-        else:
-            return render_template("authorisedUsers/login.html")    
+         if "username" not in session:
+            return render_template("authorisedUsers/login.html")
+         
+         if request.method == "POST": 
+              rating = request.form.get("rating")
+              comment = request.form.get("review")
+              username = session["username"]
 
+              if rating and comment:
+                   con = sqlite3.connect("main.db")
+                   cur = con.cursor()
+                   cur.execute("""INSERT INTO Reviews (UserName, Comment, StarRating) 
+                                  VALUES (?, ?, ?)""", (username, comment, int(rating)))
+                   con.commit()
+                   con.close()
+                   return render_template("pages/reviews.html", message="Review submitted successfully")
+         return render_template("pages/reviews.html")
 @app.route("/services")
 def services():
      return render_template("pages/services.html")
