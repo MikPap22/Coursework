@@ -1,5 +1,6 @@
 <action = "/allreviews">
 <head>
+    <link rel="stylesheet" href="/static/pages/menubarstyle.css">
     <style>
     h1 {
         color:#28A251;
@@ -29,10 +30,24 @@
     
 
     </style>
-    </head>
+    </head> 
 
 <body>
-<h1>Reviews</h1>
+
+    <nav class = "navbar">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/assistant">Health Assistant</a></li>
+            <li><a href="/doctors">Doctors</a></li>
+            <li><a href="/services">Services&Specialities</a></li>
+            <li><a href="/appointment">Appointment</a></li>
+            <li><a href="/contact">Contact Info</a></li>
+            <li><a href="/allreviews">Reviews</a></li>
+        </ul>
+    </nav>
+
+
+    <h1>Reviews</h1>
 
 <div>
     <button onclick="window.location.href='/signup';">Your Review</button>
