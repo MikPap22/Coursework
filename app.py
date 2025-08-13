@@ -94,7 +94,7 @@ def logout():
 
 @app.route("/")
 def home():
-     return render_template("homepage.html")
+     return render_template("pages/homepage.html")
 
 @app.route("/doctors")
 def doctors():
