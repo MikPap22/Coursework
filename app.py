@@ -67,20 +67,23 @@ def login():
 
 @app.route("/password", methods = ["GET","POST"])
 def password():
-     if request.method == "GET":
+    if request.method == "GET":
         if "username" in session:
             return render_template("authorisedUsers/password.html")
         else:
             return render_template("authorisedUsers/login.html")
-     else:
+    else:
+        password = request.form.get("password")
+        confirm_password = request.form.get("confirm_password")
+        if password != confirm_password:
+            return "Passwords do not match!"
         con = sqlite3.connect("main.db")
         cur = con.cursor()
-        hash=hashlib.sha256(request.form["password"].encode()).hexdigest()
+        hash = hashlib.sha256(password.encode()).hexdigest()
         cur.execute(""" UPDATE Users SET UserPassword=? WHERE UserName=?""",
-                        (hash, session["username"]))
+                    (hash, session["username"]))
         con.commit()
         con.close()
-
         return "password updated successfully"
 
 @app.route("/w")
