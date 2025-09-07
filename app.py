@@ -86,9 +86,6 @@ def password():
         con.close()
         return "password updated successfully"
 
-@app.route("/w")
-def welcome():
-     return render_template("authorisedUsers/welcome.html")
 
 @app.route("/logout")
 def logout():
