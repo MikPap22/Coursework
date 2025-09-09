@@ -69,11 +69,100 @@
         transform: translateY(-5px);
     }
 
+    .modal {
+        display: none; 
+        position: fixed; 
+        z-index: 1000; 
+        left: 0; 
+        top: 0; 
+        width: 100%; 
+        height: 100%; 
+        overflow: auto; 
+        background-color: rgba(0,0,0,0.5);
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }   
+
+    .close:hover {
+        color: black;
+    }
+    
+
+    .modal-content {
+        background-color: #fff;
+        margin: 5% auto;
+        padding: 30px;
+        border-radius: 12px;
+        width: 70%;
+        max-height: 80vh;
+        overflow-y: auto;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+        animation: fadeIn 0.3s ease-in-out;
+        line-height: 1.6;
+}
+
+    .modal-content h2 {
+        color: #28A251;
+        margin-bottom: 15px;
+        font-size: 26px;
+        text-align: center;
+    }
+
+    .modal-content h3 {
+        margin-top: 20px;
+        color: #333;
+    }
+
+    .modal-content p {
+        margin-bottom: 12px;
+    }
+
+    .modal-content ul {
+        margin: 10px 0 20px 20px;
+    }
+
+    .modal-content .button {
+        display: inline-block;
+        padding: 10px 20px;
+        margin-top: 15px;
+        font-size: 16px;
+        color: black;
+        background-color: lightblue;
+        border: none;
+        border-radius: 15px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+    </style>
+
 
     
-    
-    
-    </style>
+<script>
+function openModal(id) {
+    document.getElementById(id).style.display = "block";
+}
+
+function closeModal(id) {
+    document.getElementById(id).style.display = "none";
+}
+
+window.onclick = function(event) {
+    const modals = document.getElementsByClassName("modal");
+    for (let modal of modals) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    }
+}
+</script>  
+
 </head>
 
 <body>
@@ -105,22 +194,21 @@
                 </p>
 
                 <p style = "text-align: center;">
-                    <a class="button" href="/services/blood_diagnostics">Learn More</a>
+                    <a class="button" onClick="openModal('bloodModal')">Learn More</a>
                 </p>
             </div>
         </div>
 
-
         <div class = "card">
             <i class ="icon fa fa-globe"></i>
-            <h1>Allergist appointment</h1>
+            <h1>Headache treatment</h1>
             <div class="content">
                 <p>
-                    We organize consultations with experienced allergists to diagnose and manage allergies effectively.
+                    Our headache treatment services are designed to identify the root cause of your headaches and provide effective relief.
                 </p>
-                
+
                 <p style = "text-align: center;">
-                    <a class="button" href = "/services/allergist_appointment">Learn More</a>
+                    <a class="button" onClick="openModal('headacheModal')">Learn More</a>
                 </p>
             </div>
         </div>
@@ -135,12 +223,115 @@
                 </p>
 
                 <p style = "text-align: center;">
-                    <a class="button" href = "/services/vaccination">Learn More</a>
+                    <a class="button" onClick="openModal('vaccinationModal')">Learn More</a>
                 </p>
             </div>
         </div>
     </div>
 
+    <div id="bloodModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('bloodModal')">&times;</span>
+        <h2>Blood Diagnostics</h2>
+        <p><strong>Blood Collection:</strong><br>
+        Blood is taken from the cubital vein using a sterile disposable vacuum system. For clotting time tests, blood is taken from the 4th finger of the left hand.</p>
 
+        <p><strong>General Recommendations:</strong><br>
+        - For complete blood count and biochemistry tests, blood should be taken in the morning, on an empty stomach.<br>
+        - For lipid profile tests (beta-lipoproteins, triglycerides, cholesterol), testing must be strictly fasting. Dinner the day before should be no later than 6:00 PM and without fatty foods.<br>
+        - For infection and hormone tests, a light, non-fatty breakfast is allowed.<br>
+        - For blood group testing, it is necessary to indicate any history of blood transfusions.<br>
+        - For HIV testing, a passport is required.</p>
 
-    
+        <p><strong>Special Notes for Certain Tests:</strong><br>
+        - Women: FSH, LH, prolactin, and 17-OH progesterone are usually tested on cycle days 1–3.<br>
+        - Progesterone and estradiol are usually tested 7 days before the expected start of the next menstrual cycle.<br>
+        - Prolactin must be tested no earlier than 3 hours after waking. Levels may rise due to stress, chest surgery, sauna use, or alcohol consumption.<br>
+        - When giving blood, inform the nurse about menstrual cycle day, pregnancy weeks, menopause, or medications that affect hormones. Also report alcohol allergy.</p>
+
+        <p><strong>Cortisol:</strong><br>
+        Measured twice a day: 8:00–10:00 AM and 4:00–6:00 PM. Before the test: avoid stress, alcohol, smoking (1 hour before), and physical exertion.</p>
+
+        <p><strong>Platelet Aggregation:</strong><br>
+        Blood is taken spontaneously from the cubital vein using a sterile needle (10 ml). Must be fasting (weak tea with little sugar allowed). On the morning of the test: no smoking, coffee, alcohol (24 hrs), or garlic. Avoid invasive procedures or acute inflammation for 7–14 days before. Refrain from heavy exercise for 3 days. Rest for 30 minutes before testing.</p>
+
+        <p><strong>PSA for Men:</strong><br>
+        Done before a urologist visit or 10–14 days after. Sexual abstinence recommended for 5–7 days prior.</p>
+
+        <p><strong>Genetic Tests:</strong><br>
+        Blood is recommended to be given <em>not fasting</em> (normal meals allowed). Venous blood is collected during regular working hours without restrictions.</p>
+
+        <div style="margin-top: 20px; text-align: center;">
+            <a href="/allreviews" class="button">Reviews</a>
+            <a href="/doctors" class="button">Doctors</a>
+        </div>
+
+    </div>
+</div>
+
+<div id="headacheModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('headacheModal')">&times;</span>
+        <h2>Headache & Migraine Treatment</h2>
+
+        <h3>About Headaches</h3>
+        <p>Headache is one of the most common reasons to visit a doctor. The most frequent cause is migraine, a neurological condition often inherited through the maternal line.</p>
+
+        <h3>Migraine Characteristics</h3>
+        <p>Migraines cause pulsating pain, usually on one side of the head, often accompanied by sensitivity to light, sound, and smells. Attacks can lead to nausea, vomiting, dizziness, and disorientation. They may last from minutes to 72 hours and are rarely relieved by standard medications.</p>
+
+        <h3>Triggers</h3>
+        <ul>
+            <li>Stress and fatigue</li>
+            <li>Weather changes</li>
+            <li>Dietary irregularities or alcohol</li>
+            <li>Sleep disturbances, jetlag</li>
+        </ul>
+
+        <h3>Aura</h3>
+        <p>Some patients experience warning symptoms: visual fog, sensory disturbances, hallucinations, or speech difficulties before the attack begins.</p>
+
+        <h3>Treatment in Our Clinics</h3>
+        <p>Neurologists diagnose and select effective therapies to reduce pain intensity and prevent new attacks. Modern methods include preventive injections of botulinum toxin type A, which block pain mediators and inflammation. We also treat migraines during pregnancy safely.</p>
+
+        <h3>Migraine Therapy Approaches</h3>
+        <ul>
+            <li><strong>Acute treatment</strong>: Medications to stop ongoing migraine attacks.</li>
+            <li><strong>Preventive treatment</strong>: Long-term therapy to reduce frequency and severity of attacks.</li>
+        </ul>
+
+        <h3>Botulinum Therapy</h3>
+        <p>Since 1992, botulinum toxin type A has been successfully used to treat chronic migraine. It blocks the release of pain-related substances, preventing neurogenic inflammation and pain transmission to the brain. Global clinical experience spans over 15 years.</p>
+
+        <h3>Diagnostic & Therapeutic Options</h3>
+        <p>Our medical centers offer full diagnostics and personalized therapy plans, including botulinum toxin treatment for chronic migraine.</p>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="/allreviews" class="button">Reviews</a>
+            <a href="/doctors" class="button">Doctors</a>
+        </div>
+    </div>
+</div>
+
+<div id="vaccinationModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('vaccinationModal')">&times;</span>
+        <h2>Vaccination</h2>
+        <h3>Available Vaccines</h3>
+        <ul>
+            <li><strong>Gardasil (HPV Vaccine)</strong> – Protects against human papillomavirus types 6, 11, 16, and 18. Types 6 and 11 cause genital warts; types 16 and 18 are linked to cervical cancer, vulvar cancer, vaginal cancer (in women), as well as penile and anal cancers (in men).</li>
+            <li><strong>Infanrix® Hexa</strong> – Combined vaccine for diphtheria, tetanus, acellular pertussis, hepatitis B, inactivated polio, and infections caused by Haemophilus influenzae type b.</li>
+            <li><strong>Infanrix</strong> – Vaccine for diphtheria, tetanus, and acellular pertussis.</li>
+            <li><strong>Flu-M</strong> – Inactivated influenza vaccine for flu prevention.</li>
+            <li><strong>Prevenar® 13</strong> – Protects against pneumococcal infections.</li>
+        </ul>
+
+        <h3>Before Vaccination</h3>
+        <p>A consultation with a therapist or pediatrician is required before vaccination. The examination typically takes 10–20 minutes to ensure the patient’s readiness and safety.</p>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="/allreviews" class="button">Reviews</a>
+            <a href="/doctors" class="button">Doctors</a>
+    </div>
+</div>
+
