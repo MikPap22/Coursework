@@ -1,10 +1,146 @@
 <action = "/services">
  <head>
+
+    <link rel="stylesheet" href="/static/pages/menubarstyle.css">
+
     <style>
     h1 {
         color:#28A251;
         font-family: Georgia;}
+    
+    body {
+        background-color: white;
+        font-family: Georgia;
+        margin: 0;
+        padding: 0;
+    }
+    .title {
+        color: #28A251;
+        font-family: Georgia;
+        text-align: center;
+        margin: 150px auto 15px auto;
+        width: 1200px;
+    }
+
+    .services {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 500px;
+        flex-wrap: wrap;
+    }
+    
+    .card {
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin: 20px;
+        padding: 20px 30px;
+        width: 300px;
+        text-align: center;
+        transition: all 0.3s cubic-bezier(0.02, 0.01, 0.47, 1);
+        overflow: hidden;
+        position: relative;
+    }
+
+    .card h1 {
+        font-family: Georgia;
+        text-align: center;
+        font-size: 22px;
+        margin-bottom: 10px;
+    }
+
+    .card .button {
+        display: inline-block;
+        padding: 10px 20px;
+        margin-top: 15px;
+        font-size: 16px;
+        color: black;
+        background-color: lightblue;
+        border: none;
+        border-radius: 15px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .card:hover {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        transform: translateY(-5px);
+    }
+
+
+    
+    
+    
     </style>
 </head>
 
-<h1>Services & Specialities</h1>
+<body>
+    
+    <nav class = "navbar">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/assistant">Health Assistant</a></li>
+            <li><a href="/doctors">Doctors</a></li>
+            <li><a href="/services">Services&Specialities</a></li>
+            <li><a href="/appointment">Appointment</a></li>
+            <li><a href="/contact">Contact Info</a></li>
+            <li><a href="/allreviews">Reviews</a></li>
+        </ul>
+    </nav>
+    
+    
+    <div class = "title">
+    <h1>Services & Specialities</h1>
+    </div>
+
+    <div class = "services">
+        <div class = "card">
+            <i class ="icon fa fa-globe"></i>
+            <h1>Blood diagnostics</h1>
+            <div class="content">
+                <p>
+                    We offer comprehensive blood diagnostics to help monitor your health and detect potential issues early.
+                </p>
+
+                <p style = "text-align: center;">
+                    <a class="button" href="/services/blood_diagnostics">Learn More</a>
+                </p>
+            </div>
+        </div>
+
+
+        <div class = "card">
+            <i class ="icon fa fa-globe"></i>
+            <h1>Allergist appointment</h1>
+            <div class="content">
+                <p>
+                    We organize consultations with experienced allergists to diagnose and manage allergies effectively.
+                </p>
+                
+                <p style = "text-align: center;">
+                    <a class="button" href = "/services/allergist_appointment">Learn More</a>
+                </p>
+            </div>
+        </div>
+
+
+        <div class = "card">
+            <i class ="icon fa fa-globe"></i>
+            <h1>Vaccination</h1>
+            <div class="content">
+                <p>
+                    We provide a range of vaccinations to protect you and your family from various infectious diseases.
+                </p>
+
+                <p style = "text-align: center;">
+                    <a class="button" href = "/services/vaccination">Learn More</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+
+    
