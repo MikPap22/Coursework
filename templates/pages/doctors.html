@@ -1,10 +1,235 @@
 <action = "/doctors">
 <head>
+
+    <link rel="stylesheet" href="/static/pages/menubarstyle.css">
+
     <style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background: white;
+        text-align: center ;
+    }
+
     h1 {
-        color:#28A251;
-        font-family: Georgia;}
+        margin-top: 200px;
+        color: #28A251;
+
+    }
+
+    #searchBar {
+        margin: 20px auto;
+        padding: 10px;
+        width: 300px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    .doctor-list {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-top: 40px;
+    }
+
+    .doctor-card {
+        background: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 15px;
+        width: 200px;
+        text-align: center;
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+
+    .doctor-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .doctor-card img {
+        width: 100%;
+        height: auto;
+        border-radius: 50%;
+        margin-bottom: 10px;
+    }
+
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.6);
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 500px;
+        width: 90%;
+        position: relative;
+    }
+
+    .close {
+        position: absolute;
+        top: 10px; right: 15px;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    .modal h2 {
+        color: #28A251;
+        margin-top: 0;
+    }
+
+    .modal .button {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 10px 5px 0 5px;
+        background: lightblue;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        text-decoration: none;
+        color: black;
+    }
     </style>
+
+    <script>
+
+    function openModal(id) {
+        document.getElementById(id).style.display = "flex";
+    }
+
+    function closeModal(id) {
+        document.getElementById(id).style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        document.querySelectorAll('.modal').forEach(modal => {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+    }
+
+    document.getElementById("searchBar").addEventListener("input", function() {
+        let filter = this.value.toLowerCase();
+        let doctors = document.querySelectorAll(".doctor-card");
+
+        doctors.forEach(doc => {
+            let text = doc.innerText.toLowerCase();
+            doc.style.display = text.includes(filter) ? "block" : "none";
+        });
+    });
+
+    window.onload = function() {
+        if (window.location.hash) {
+            let id = window.location.hash.substring(1);
+            if (document.getElementById(id)) {
+                openModal(id);
+            }
+        }
+    }
+
+    window.onload = function() {
+    const hash = window.location.hash.substring(1); // remove the "#"
+    if (hash) {
+        const modal = document.getElementById(hash);
+        if (modal) {
+            modal.style.display = "block"; // open the modal
+            }
+        }
+    }
+
+    </script>
+
 </head>
 
-<h1>Doctors</h1>
+
+<body>
+
+    <nav class = "navbar">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/assistant">Health Assistant</a></li>
+            <li><a href="/doctors">Doctors</a></li>
+            <li><a href="/services">Services&Specialities</a></li>
+            <li><a href="/appointment">Appointment</a></li>
+            <li><a href="/contact">Contact Info</a></li>
+            <li><a href="/allreviews">Reviews</a></li>
+        </ul>
+    </nav>
+
+    <h1>Doctors</h1>
+    <input type="text" id="searchBar" placeholder="Search for a doctor...">
+
+
+<div class="doctor-list">
+    <div class="doctor-card" onclick="openModal('doc1')" data-name="Dr. Alice Johnson">
+        <img src="https://mamadeti.ru/upload/iblock/bd2/yl0hqmz0x24pybbw0pwhgfefgyrti3bt/%D0%A9%D0%95%D0%A0%D0%91%D0%90%D0%9A%D0%9E%D0%92%D0%90-8441.png" alt="Dr. Alice">
+        <h3>Dr. Alice Johnson</h3>
+        <p>Cardiologist</p>
+    </div>
+
+    <div class="doctor-card" onclick="openModal('doc2')" data-name="Dr. Mark Lee">
+        <img src="https://mamadeti.ru/upload/iblock/e08/89kjmo1a3jk2jpps2yc1rdqueu68u002/2.%D0%A1%D0%B2%D0%B5%D1%80%D0%B1%D0%B5%D0%B5%D0%B2_%D0%A1%D0%95.png" alt="Dr. Mark">
+        <h3>Dr. Mark Lee</h3>
+        <p>Pediatrician</p>
+    </div>
+
+    <div class="doctor-card" onclick="openModal('doc3')" data-name="Dr. Sarah Kim">
+        <img src="https://mamadeti.ru/upload/iblock/087/4a5ofbh19qlq7djw7v9gara0x43dnw52/zadoyan.png" alt="Dr. Sarah">
+        <h3>Dr. Bob Richardson</h3>
+        <p>Hematologist</p>
+    </div>
+</div>
+
+<div id="doc1" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('doc1')">&times;</span>
+        <h2>Dr. Alice Johnson</h2>
+        <p><strong>Specialty:</strong> Cardiology</p>
+      <p><strong>Education:</strong> Harvard Medical School</p>
+      <p><strong>Experience:</strong> 15 years in cardiology, former consultant at Mayo Clinic</p>
+      <p><strong>Expertise:</strong> Heart disease prevention, cardiac surgery, patient care</p>
+        <a href="/allreviews" class="button">Reviews</a>
+        <a href="/appointment" class="button">Appointment</a>
+    </div>
+</div>
+
+<div id="doc2" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('doc2')">&times;</span>
+        <h2>Dr. Mark Lee</h2>
+        <p><strong>Specialty:</strong> Neurology</p>
+      <p><strong>Education:</strong> Oxford University, MD in Neurology</p>
+      <p><strong>Experience:</strong> 12 years working with migraine & epilepsy patients</p>
+      <p><strong>Expertise:</strong> Migraine treatment, neurodegenerative diseases</p>
+        <a href="/allreviews" class="button">Reviews</a>
+        <a href="/appointment" class="button">Appointment</a>
+    </div>
+</div>
+
+<div id="doc3" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('doc3')">&times;</span>
+        <h2>Dr. Sarah Kim</h2>
+        <p><strong>Specialty:</strong> Pediatrics</p>
+      <p><strong>Education:</strong> Stanford University School of Medicine</p>
+      <p><strong>Experience:</strong> 10 years in child healthcare, UNICEF projects</p>
+      <p><strong>Expertise:</strong> Vaccinations, child development, chronic illness care</p>
+        <a href="/allreviews" class="button">Reviews</a>
+        <a href="/appointment" class="button">Appointment</a>
+    </div>
+</div>
+
+</body>
