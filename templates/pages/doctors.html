@@ -121,34 +121,26 @@
         });
     }
 
-    document.getElementById("searchBar").addEventListener("input", function() {
-        let filter = this.value.toLowerCase();
-        let doctors = document.querySelectorAll(".doctor-card");
+    window.addEventListener("load", function() {
+  document.getElementById("searchBar").addEventListener("keyup", function() {
+    let filter = this.value.toLowerCase();
+    let doctors = document.getElementsByClassName("doctor-card");
 
-        doctors.forEach(doc => {
-            let text = doc.innerText.toLowerCase();
-            doc.style.display = text.includes(filter) ? "block" : "none";
-        });
-    });
-
-    window.onload = function() {
-        if (window.location.hash) {
-            let id = window.location.hash.substring(1);
-            if (document.getElementById(id)) {
-                openModal(id);
-            }
-        }
+    for (let i = 0; i < doctors.length; i++) {
+      let name = doctors[i].getAttribute("data-name").toLowerCase();
+      doctors[i].style.display = name.includes(filter) ? "block" : "none";
     }
+  });
+});
 
-    window.onload = function() {
-    const hash = window.location.hash.substring(1); // remove the "#"
+    const hash = window.location.hash.substring(1); 
     if (hash) {
         const modal = document.getElementById(hash);
         if (modal) {
-            modal.style.display = "block"; // open the modal
+            modal.style.display = "block"; 
             }
         }
-    }
+    
 
     </script>
 
