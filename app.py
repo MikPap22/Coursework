@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session,redirect
 
 import sqlite3
 import hashlib
@@ -22,6 +22,15 @@ cur.execute(""" CREATE TABLE IF NOT EXISTS Reviews (
                 UserName VARCHAR(10) NOT NULL,
                 Comment VARCHAR(1000) NOT NULL,
                 StarRating INTEGER NOT NULL,
+                FOREIGN KEY (UserName) REFERENCES Users(UserName)
+                )""")
+
+
+cur.execute (""" CREATE TABLE IF NOT EXISTS Appointments (
+                AppointmentID INTEGER PRIMARY KEY AUTOINCREMENT,
+                UserName VARCHAR(10) NOT NULL,
+                DoctorName VARCHAR(50) NOT NULL,
+                AppointmentDate DATE NOT NULL,
                 FOREIGN KEY (UserName) REFERENCES Users(UserName)
                 )""")
 con.commit()
@@ -102,11 +111,36 @@ def doctors():
 
 @app.route("/appointment")
 def appointment():
-     return render_template("pages/appointment.html")
+    if "username" not in session:
+        return redirect("/login")
+     
+    con = sqlite3.connect("main.db")
+    con.row_factory = sqlite3.Row
+    cur = con.cursor()
+
+    doctors = ["Dr. ALice Johnson", "Dr. Mark Lee", "Dr. Sarah Kim"]
+     
+    if request.method == "POST":
+        doctor = request.form.get("doctor")
+        date = request.form.get("date")
+        username = session["username"]
+    
+        if doctor and date:
+                cur.execute("""INSERT INTO Appointments (UserName, DoctorName, AppointmentDate) 
+                            VALUES (?, ?, ?)""", (username, doctor, date))
+                con.commit()
+    
+    cur.execute("SELECT DoctorName, AppointmentDate FROM Appointments WHERE UserName=?", (session["username"],))
+    my_appointments = cur.fetchall()
+    con.close()
+
+    return render_template("pages/appointment.html", doctors=doctors, appointments=my_appointments)
 
 @app.route("/assistant")
 def assistant():
-     return render_template("pages/assistant.html")
+     import os
+     api_chat = os.environ.get("API_KEY", "")
+     return render_template("pages/assistant.html", api_key=api_chat)
 
 @app.route("/contact")
 def contact():

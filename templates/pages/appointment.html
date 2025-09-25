@@ -1,10 +1,120 @@
 <action = "/appointment">
 <head>
+    <link rel="stylesheet" href="/static/pages/menubarstyle.css">
     <style>
-    h1 {
-        color:#28A251;
-        font-family: Georgia;}
+        body {
+            font-family: Georgia;
+            background: #f0f8ff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        nav.navbar {
+            width: 1200px;
+        }
+
+        h1 {
+            color: #28A251;
+            margin-top: 150px;
+            text-align: center;
+            width: 1200px;
+        }
+
+        .container {
+            width: 1200px; 
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            box-shadow: 0px 5px 10px rgba(0,0,0,0.1);
+        }
+
+        .doctor-list {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .doctor-card {
+            width: 350px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .doctor-card img {
+            width: 100%;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .appointment-dates {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .appointment-dates button {
+            width: 150px;
+            height: 40px;
+            margin: 5px;
+            border-radius: 8px;
+            border: none;
+            background-color: #28A251;
+            color: white;
+            cursor: pointer;
+        }
+
+        .appointment-dates button.disabled {
+            background-color: grey;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 
-<h1>Appointment</h1>
+<body>
+    <nav class="navbar">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/assistant">Health Assistant</a></li>
+            <li><a href="/doctors">Doctors</a></li>
+            <li><a href="/services">Services&Specialities</a></li>
+            <li><a href="/appointment">Appointment</a></li>
+            <li><a href="/contact">Contact Info</a></li>
+            <li><a href="/allreviews">Reviews</a></li>
+        </ul>
+    </nav>
+
+    <h1>Book an Appointment</h1>
+
+    <div class="container">
+        <h2>Select a Doctor</h2>
+        <div class="doctor-list">
+            <div class="doctor-card">
+                <img src="https://mamadeti.ru/upload/iblock/bd2/yl0hqmz0x24pybbw0pwhgfefgyrti3bt/%D0%A9%D0%95%D0%A0%D0%91%D0%90%D0%9A%D0%9E%D0%92%D0%90-8441.png" alt="Dr. Alice">
+                <p>Dr. Alice Johnson</p>
+                <p>Cardiologist</p>
+            </div>
+            <div class="doctor-card">
+                <img src="https://mamadeti.ru/upload/iblock/e08/89kjmo1a3jk2jpps2yc1rdqueu68u002/2.%D0%A1%D0%B2%D0%B5%D1%80%D0%B1%D0%B5%D0%B5%D0%B2_%D0%A1%D0%95.png" alt="Dr. Mark">
+                <p>Dr. Mark Lee</p>
+                <p>Pediatrician</p>
+            </div>
+            <div class="doctor-card">
+                <img src="https://mamadeti.ru/upload/iblock/087/4a5ofbh19qlq7djw7v9gara0x43dnw52/zadoyan.png" alt="Dr. Sarah">
+                <p>Dr. Sarah Kim</p>
+                <p>Hematologist</p>
+            </div>
+        </div>
+
+        <div class="appointment-dates">
+            <h2>Available Dates</h2>
+            <button>2025-09-21</button>
+            <button>2025-09-22</button>
+            <button class="disabled">2025-09-23</button>
+        </div>
+    </div>
+</body>
