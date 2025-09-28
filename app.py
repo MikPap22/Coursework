@@ -53,26 +53,26 @@ def signup():
 
         return "signup success"
 
-
-
 @app.route("/login", methods=["GET","POST"])
 def login():
     if request.method == "GET":
         return render_template("authorisedUsers/login.html")
     else:
-            con = sqlite3.connect("main.db")
-            cur = con.cursor()
-            hash=hashlib.sha256(request.form["password"].encode()).hexdigest()
-            cur.execute(" SELECT * FROM Users WHERE UserName = ? AND UserPassword = ?",
-                        (request.form["username"], hash))
-            
-            user = cur.fetchone()
-            print(user)
-            if user:
-                 session["username"] = request.form["username"]
-                 return render_template("pages/reviews.html")
-            else:
-                return "login failed"
+        next_page = request.form.get("next") or "/reviews"
+
+        con = sqlite3.connect("main.db")
+        cur = con.cursor()
+        hash = hashlib.sha256(request.form["password"].encode()).hexdigest()
+        cur.execute("SELECT * FROM Users WHERE UserName=? AND UserPassword=?",
+                    (request.form["username"], hash))
+        user = cur.fetchone()
+        con.close()
+
+        if user:
+            session["username"] = request.form["username"]
+            return redirect(next_page)  
+        else:
+            return "login failed"
 
 @app.route("/password", methods = ["GET","POST"])
 def password():
