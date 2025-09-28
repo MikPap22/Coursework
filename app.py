@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, session,redirect
-
+from datetime import datetime, timedelta
 import sqlite3
 import hashlib
 
@@ -109,32 +109,89 @@ def home():
 def doctors():
      return render_template("pages/doctors.html")
 
-@app.route("/appointment")
+@app.route("/appointment", methods=["GET", "POST"])
 def appointment():
-    if "username" not in session:
-        return redirect("/login")
-     
     con = sqlite3.connect("main.db")
     con.row_factory = sqlite3.Row
     cur = con.cursor()
 
-    doctors = ["Dr. ALice Johnson", "Dr. Mark Lee", "Dr. Sarah Kim"]
-     
-    if request.method == "POST":
+    message = None
+
+    # Cancel appointment (only if logged in)
+    if request.method == "POST" and "cancel_id" in request.form and "username" in session:
+        cancel_id = request.form.get("cancel_id")
+        cur.execute("DELETE FROM Appointments WHERE AppointmentID=? AND UserName=?",
+                    (cancel_id, session["username"]))
+        con.commit()
+        message = "Appointment cancelled."
+
+    # Book new appointment (only if logged in)
+    elif request.method == "POST" and "username" in session:
         doctor = request.form.get("doctor")
         date = request.form.get("date")
-        username = session["username"]
-    
-        if doctor and date:
-                cur.execute("""INSERT INTO Appointments (UserName, DoctorName, AppointmentDate) 
-                            VALUES (?, ?, ?)""", (username, doctor, date))
-                con.commit()
-    
-    cur.execute("SELECT DoctorName, AppointmentDate FROM Appointments WHERE UserName=?", (session["username"],))
-    my_appointments = cur.fetchall()
-    con.close()
+        time = request.form.get("time")
 
-    return render_template("pages/appointment.html", doctors=doctors, appointments=my_appointments)
+        try:
+            appointment_datetime = datetime.strptime(f"{date} {time}", "%Y-%m-%d %H:%M")
+        except ValueError:
+            con.close()
+            return render_template("pages/appointment.html",
+                                   message="Invalid date or time",
+                                   available_times=[],
+                                   appointments=[],
+                                   logged_in="username" in session)
+
+        # Check if slot already booked
+        cur.execute("""SELECT 1 FROM Appointments 
+                       WHERE DoctorName=? AND AppointmentDate=?""",
+                    (doctor, appointment_datetime))
+        if cur.fetchone():
+            message = "That time slot is already booked!"
+        else:
+            cur.execute("""INSERT INTO Appointments(UserName, DoctorName, AppointmentDate)
+                           VALUES (?, ?, ?)""",
+                        (session["username"], doctor, appointment_datetime))
+            con.commit()
+            message = "Appointment booked successfully!"
+
+    # Default values for doctor & date (today + Dr. Smith)
+    date = request.args.get("date") or datetime.now().strftime("%Y-%m-%d")
+    doctor = request.args.get("doctor") or "Dr. Smith"
+
+    # Generate available times (9:00–17:00, 15-min increments)
+    start = datetime.strptime(date + " 09:00", "%Y-%m-%d %H:%M")
+    end = datetime.strptime(date + " 17:00", "%Y-%m-%d %H:%M")
+    slots = []
+    while start < end:
+        slots.append(start.strftime("%H:%M"))
+        start += timedelta(minutes=15)
+
+    # Remove already booked slots
+    cur.execute("""SELECT strftime('%H:%M', AppointmentDate) 
+                   FROM Appointments 
+                   WHERE DoctorName=? AND date(AppointmentDate)=?""",
+                (doctor, date))
+    booked = [row[0] for row in cur.fetchall()]
+    available_times = [s for s in slots if s not in booked]
+
+    # Fetch current user's appointments
+    my_appointments = []
+    if "username" in session:
+        cur.execute("""SELECT AppointmentID, DoctorName, AppointmentDate
+                       FROM Appointments
+                       WHERE UserName=?
+                       ORDER BY AppointmentDate ASC""",
+                    (session["username"],))
+        my_appointments = cur.fetchall()
+
+    con.close()
+    return render_template("pages/appointment.html",
+                           available_times=available_times,
+                           appointments=my_appointments,
+                           message=message,
+                           logged_in="username" in session,
+                           chosen_date=date,
+                           chosen_doctor=doctor)
 
 @app.route("/assistant")
 def assistant():

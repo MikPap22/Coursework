@@ -75,46 +75,84 @@
     </style>
 </head>
 
+<head>
+    <title>Appointments</title>
+    <script>
+        function disableWeekends(event) {
+            const day = new Date(event.target.value).getUTCDay();
+            if (day === 6 || day === 0) {
+                alert("Please select a weekday (Mon–Fri).");
+                event.target.value = "";
+            }
+        }
+    </script>
+</head>
 <body>
-    <nav class="navbar">
+    <h2>Appointments</h2>
+
+    {% if message %}
+        <p style="color:green">{{ message }}</p>
+    {% endif %}
+
+    {% if logged_in %}
+        <form method="POST" action="/appointment">
+            <label for="doctor">Choose Doctor:</label>
+            <select name="doctor" required>
+                <option value="Dr. Smith" {% if chosen_doctor=="Dr. Smith" %}selected{% endif %}>Dr. Smith</option>
+                <option value="Dr. Johnson" {% if chosen_doctor=="Dr. Johnson" %}selected{% endif %}>Dr. Johnson</option>
+                <option value="Dr. Patel" {% if chosen_doctor=="Dr. Patel" %}selected{% endif %}>Dr. Patel</option>
+            </select>
+            <br><br>
+
+            <label for="date">Select Date:</label>
+            <input type="date" name="date" value="{{ chosen_date }}" required onchange="disableWeekends(event)">
+            <br><br>
+
+            <label for="time">Select Time:</label>
+            <select name="time" required>
+                {% for t in available_times %}
+                    <option value="{{ t }}">{{ t }}</option>
+                {% endfor %}
+            </select>
+            <br><br>
+
+            <button type="submit">Book Appointment</button>
+        </form>
+    {% else %}
+        <p><strong>Log in to book an appointment.</strong></p>
+    {% endif %}
+
+    <hr>
+
+    <h3>Available Times for {{ chosen_doctor }} on {{ chosen_date }}</h3>
+    {% if available_times %}
         <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/assistant">Health Assistant</a></li>
-            <li><a href="/doctors">Doctors</a></li>
-            <li><a href="/services">Services&Specialities</a></li>
-            <li><a href="/appointment">Appointment</a></li>
-            <li><a href="/contact">Contact Info</a></li>
-            <li><a href="/allreviews">Reviews</a></li>
+            {% for t in available_times %}
+                <li>{{ t }}</li>
+            {% endfor %}
         </ul>
-    </nav>
+    {% else %}
+        <p>No available times.</p>
+    {% endif %}
 
-    <h1>Book an Appointment</h1>
+    <hr>
 
-    <div class="container">
-        <h2>Select a Doctor</h2>
-        <div class="doctor-list">
-            <div class="doctor-card">
-                <img src="https://mamadeti.ru/upload/iblock/bd2/yl0hqmz0x24pybbw0pwhgfefgyrti3bt/%D0%A9%D0%95%D0%A0%D0%91%D0%90%D0%9A%D0%9E%D0%92%D0%90-8441.png" alt="Dr. Alice">
-                <p>Dr. Alice Johnson</p>
-                <p>Cardiologist</p>
-            </div>
-            <div class="doctor-card">
-                <img src="https://mamadeti.ru/upload/iblock/e08/89kjmo1a3jk2jpps2yc1rdqueu68u002/2.%D0%A1%D0%B2%D0%B5%D1%80%D0%B1%D0%B5%D0%B5%D0%B2_%D0%A1%D0%95.png" alt="Dr. Mark">
-                <p>Dr. Mark Lee</p>
-                <p>Pediatrician</p>
-            </div>
-            <div class="doctor-card">
-                <img src="https://mamadeti.ru/upload/iblock/087/4a5ofbh19qlq7djw7v9gara0x43dnw52/zadoyan.png" alt="Dr. Sarah">
-                <p>Dr. Sarah Kim</p>
-                <p>Hematologist</p>
-            </div>
-        </div>
-
-        <div class="appointment-dates">
-            <h2>Available Dates</h2>
-            <button>2025-09-21</button>
-            <button>2025-09-22</button>
-            <button class="disabled">2025-09-23</button>
-        </div>
-    </div>
+    {% if logged_in %}
+        <h3>My Appointments</h3>
+        {% if appointments %}
+            <ul>
+                {% for appt in appointments %}
+                    <li>
+                        {{ appt["DoctorName"] }} — {{ appt["AppointmentDate"] }}
+                        <form method="POST" action="/appointment" style="display:inline">
+                            <input type="hidden" name="cancel_id" value="{{ appt['AppointmentID'] }}">
+                            <button type="submit">Cancel</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>You have no appointments booked.</p>
+        {% endif %}
+    {% endif %}
 </body>
