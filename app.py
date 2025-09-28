@@ -99,7 +99,7 @@ def password():
 @app.route("/logout")
 def logout():
      session.pop("username", None)
-     return render_template("authorisedUsers/login.html")
+     return render_template("authorisedUsers/homepage.html")
 
 @app.route("/")
 def home():

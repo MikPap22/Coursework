@@ -52,13 +52,12 @@
         <p style="color:green">{{ message }}</p>
     {% endif %}
 
-    <!-- Doctor & Date picker always visible -->
     <form method="GET" action="/appointment">
         <label for="doctor">Choose Doctor:</label>
         <select name="doctor" required>
-            <option value="Dr. Smith" {% if chosen_doctor=="Dr. Smith" %}selected{% endif %}>Dr. Smith</option>
-            <option value="Dr. Johnson" {% if chosen_doctor=="Dr. Johnson" %}selected{% endif %}>Dr. Johnson</option>
-            <option value="Dr. Patel" {% if chosen_doctor=="Dr. Patel" %}selected{% endif %}>Dr. Patel</option>
+            <option value="Dr. Alice Johnson" {% if chosen_doctor=="Dr. Alice Johnson" %}selected{% endif %}>Dr. Alice Johnson</option>
+            <option value="Dr. Mark Lee" {% if chosen_doctor=="Dr. Mark Lee" %}selected{% endif %}>Dr. Mark Lee</option>
+            <option value="Dr. Bob Richardson" {% if chosen_doctor=="Dr. Bob Richardson" %}selected{% endif %}>Dr. Bob Richardson</option>
         </select>
         <br><br>
 
@@ -71,7 +70,6 @@
 
     <hr>
 
-    <!-- Always show available slots -->
     <h3>Available Times for {{ chosen_doctor }} on {{ chosen_date }}</h3>
     {% if available_times %}
         <ul>
@@ -86,13 +84,11 @@
     <hr>
 
     {% if logged_in %}
-        <!-- Logout & Change Password -->
         <p>
             <a href="/logout"><button type="button">Logout</button></a>
             <a href="/password"><button type="button">Change Password</button></a>
         </p>
 
-        <!-- Booking form -->
         <form method="POST" action="/appointment">
             <input type="hidden" name="doctor" value="{{ chosen_doctor }}">
             <input type="hidden" name="date" value="{{ chosen_date }}">
@@ -110,7 +106,6 @@
 
         <hr>
 
-        <!-- My Appointments -->
         <h3>My Appointments</h3>
         {% if appointments %}
             <ul>
