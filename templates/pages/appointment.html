@@ -1,36 +1,117 @@
 <head>
     <link rel="stylesheet" href="/static/pages/menubarstyle.css">
+    
     <style>
         body {
-            font-family: Georgia;
+            font-family: Georgia, serif;
             background: #f0f8ff;
             margin: 0;
             padding: 0;
+
             display: flex;
             flex-direction: column;
             align-items: center;
-        }
-
-        nav.navbar {
-            width: 1200px;
+            padding-top: 120px; 
         }
 
         h1 {
             color: #28A251;
-            margin-top: 150px;
+            margin-bottom: 20px;
             text-align: center;
-            width: 1200px;
         }
 
         .container {
-            width: 1200px; 
+            width: 800px; 
             background: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 30px;
-            box-shadow: 0px 5px 10px rgba(0,0,0,0.1);
+            padding: 40px 50px;
+            border-radius: 20px;
+            margin-bottom: 50px;
+            box-shadow: 0px 8px 20px rgba(0,0,0,0.1);
+        }
+
+        label {
+            font-weight: bold;
+            display: inline-block;
+            margin: 10px 0 5px;
+        }
+
+        select, input[type="date"] {
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        button {
+            height: 50px;
+            width: 200px;
+            font-size: large;
+            background-color: lightblue;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        button:hover {
+            transform: scale(1.04);
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .times-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 20px;
+            padding: 0;
+            list-style: none;
+        }
+
+        .times-grid li {
+            background: #e6f7ee;
+            border: 1px solid #28A251;
+            padding: 8px 18px;
+            border-radius: 25px;
+            font-weight: bold;
+            color: #28A251;
+            transition: all 0.2s ease;
+        }
+
+        .times-grid li:hover {
+            background: #28A251;
+            color: white;
+            cursor: pointer;
+            transform: translateY(-2px);
+        }
+
+        hr {
+            margin: 40px 0;
+            border: none;
+            height: 1px;
+            background: #ddd;
+        }
+
+        .appointments-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .appointments-list li {
+            padding: 14px 18px;
+            background: #f9f9f9;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0px 2px 5px rgba(0,0,0,0.05);
         }
     </style>
+
 </head>
 
 <head>
@@ -46,86 +127,103 @@
     </script>
 </head>
 <body>
-    <h2>Appointments</h2>
-
-    {% if message %}
-        <p style="color:green">{{ message }}</p>
-    {% endif %}
-
-    <form method="GET" action="/appointment">
-        <label for="doctor">Choose Doctor:</label>
-        <select name="doctor" required>
-            <option value="Dr. Alice Johnson" {% if chosen_doctor=="Dr. Alice Johnson" %}selected{% endif %}>Dr. Alice Johnson</option>
-            <option value="Dr. Mark Lee" {% if chosen_doctor=="Dr. Mark Lee" %}selected{% endif %}>Dr. Mark Lee</option>
-            <option value="Dr. Bob Richardson" {% if chosen_doctor=="Dr. Bob Richardson" %}selected{% endif %}>Dr. Bob Richardson</option>
-        </select>
-        <br><br>
-
-        <label for="date">Select Date:</label>
-        <input type="date" name="date" value="{{ chosen_date }}" required onchange="disableWeekends(event)">
-        <br><br>
-
-        <button type="submit">Show Available Times</button>
-    </form>
-
-    <hr>
-
-    <h3>Available Times for {{ chosen_doctor }} on {{ chosen_date }}</h3>
-    {% if available_times %}
+    <nav class="navbar">
         <ul>
-            {% for t in available_times %}
-                <li>{{ t }}</li>
-            {% endfor %}
+            <li><a href="/">Home</a></li>
+            <li><a href="/assistant">Health Assistant</a></li>
+            <li><a href="/doctors">Doctors</a></li>
+            <li><a href="/services">Services & Specialities</a></li>
+            <li><a href="/appointment">Appointment</a></li>
+            <li><a href="/contact">Contact Info</a></li>
+            <li><a href="/allreviews">Reviews</a></li>
         </ul>
-    {% else %}
-        <p>No available times.</p>
-    {% endif %}
+    </nav>
 
-    <hr>
+    <h1>Appointments</h1>
 
-    {% if logged_in %}
-        <p>
-            <a href="/logout"><button type="button">Logout</button></a>
-            <a href="/password"><button type="button">Change Password</button></a>
-        </p>
+    <div class="container">
+        {% if message %}
+            <p style="color:green">{{ message }}</p>
+        {% endif %}
 
-        <form method="POST" action="/appointment">
-            <input type="hidden" name="doctor" value="{{ chosen_doctor }}">
-            <input type="hidden" name="date" value="{{ chosen_date }}">
-
-            <label for="time">Select Time:</label>
-            <select name="time" required>
-                {% for t in available_times %}
-                    <option value="{{ t }}">{{ t }}</option>
-                {% endfor %}
+        <form method="GET" action="/appointment">
+            <label for="doctor">Choose Doctor:</label>
+            <select name="doctor" required>
+                <option value="Dr. Alice Johnson" {% if chosen_doctor=="Dr. Alice Johnson" %}selected{% endif %}>Dr. Alice Johnson</option>
+                <option value="Dr. Mark Lee" {% if chosen_doctor=="Dr. Mark Lee" %}selected{% endif %}>Dr. Mark Lee</option>
+                <option value="Dr. Bob Richardson" {% if chosen_doctor=="Dr. Bob Richardson" %}selected{% endif %}>Dr. Bob Richardson</option>
             </select>
-            <br><br>
 
-            <button type="submit">Book Appointment</button>
+            <label for="date">Select Date:</label>
+            <input type="date" name="date" value="{{ chosen_date }}" required onchange="disableWeekends(event)">
+
+            <div style="text-align:center; margin-top:20px;">
+                <button type="submit">Show Available Times</button>
+            </div>
         </form>
 
         <hr>
 
-        <h3>My Appointments</h3>
-        {% if appointments %}
-            <ul>
-                {% for appt in appointments %}
-                    <li>
-                        {{ appt["DoctorName"] }} — {{ appt["AppointmentDate"] }}
-                        <form method="POST" action="/appointment" style="display:inline">
-                            <input type="hidden" name="cancel_id" value="{{ appt['AppointmentID'] }}">
-                            <button type="submit">Cancel</button>
-                        </form>
-                    </li>
+        <h2>Available Times for {{ chosen_doctor }} on {{ chosen_date }}</h2>
+        {% if available_times %}
+            <ul class="times-grid">
+                {% for t in available_times %}
+                    <li>{{ t }}</li>
                 {% endfor %}
             </ul>
         {% else %}
-            <p>You have no appointments booked.</p>
+            <p style="text-align:center">No available times.</p>
         {% endif %}
-    {% else %}
-        <p><strong>Log in to book an appointment.</strong></p>
-        <a href="/login?next=/appointment">
-            <button type="button">Login</button>
-        </a>
-    {% endif %}
+
+        <hr>
+
+        {% if logged_in %}
+            <div style="text-align:center; margin-bottom:20px;">
+                <a href="/logout"><button type="button">Logout</button></a>
+                <a href="/password"><button type="button">Change Password</button></a>
+            </div>
+
+            <form method="POST" action="/appointment">
+                <input type="hidden" name="doctor" value="{{ chosen_doctor }}">
+                <input type="hidden" name="date" value="{{ chosen_date }}">
+
+                <label for="time">Select Time:</label>
+                <select name="time" required>
+                    {% for t in available_times %}
+                        <option value="{{ t }}">{{ t }}</option>
+                    {% endfor %}
+                </select>
+
+                <div style="text-align:center; margin-top:20px;">
+                    <button type="submit">Book Appointment</button>
+                </div>
+            </form>
+
+            <hr>
+
+            <h2>My Appointments</h2>
+            {% if appointments %}
+                <ul class="appointments-list">
+                    {% for appt in appointments %}
+                        <li>
+                            {{ appt["DoctorName"] }} — {{ appt["AppointmentDate"] }}
+                            <form method="POST" action="/appointment" style="display:inline">
+                                <input type="hidden" name="cancel_id" value="{{ appt['AppointmentID'] }}">
+                                <button type="submit">Cancel</button>
+                            </form>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>You have no appointments booked.</p>
+            {% endif %}
+        {% else %}
+            <p style="text-align:center"><strong>Log in to book an appointment.</strong></p>
+            <div style="text-align:center;">
+                <a href="/login?next=/appointment">
+                    <button type="button">Login</button>
+                </a>
+            </div>
+        {% endif %}
+    </div>
 </body>
