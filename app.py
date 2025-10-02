@@ -117,7 +117,6 @@ def appointment():
 
     message = None
 
-    # Cancel appointment (only if logged in)
     if request.method == "POST" and "cancel_id" in request.form and "username" in session:
         cancel_id = request.form.get("cancel_id")
         cur.execute("DELETE FROM Appointments WHERE AppointmentID=? AND UserName=?",
@@ -125,7 +124,6 @@ def appointment():
         con.commit()
         message = "Appointment cancelled."
 
-    # Book new appointment (only if logged in)
     elif request.method == "POST" and "username" in session:
         doctor = request.form.get("doctor")
         date = request.form.get("date")
@@ -141,7 +139,6 @@ def appointment():
                                    appointments=[],
                                    logged_in="username" in session)
 
-        # Check if slot already booked
         cur.execute("""SELECT 1 FROM Appointments 
                        WHERE DoctorName=? AND AppointmentDate=?""",
                     (doctor, appointment_datetime))
@@ -154,11 +151,9 @@ def appointment():
             con.commit()
             message = "Appointment booked successfully!"
 
-    # Default values for doctor & date (today + Dr. Smith)
     date = request.args.get("date") or datetime.now().strftime("%Y-%m-%d")
     doctor = request.args.get("doctor") or "Dr. Smith"
 
-    # Generate available times (9:00–17:00, 15-min increments)
     start = datetime.strptime(date + " 09:00", "%Y-%m-%d %H:%M")
     end = datetime.strptime(date + " 17:00", "%Y-%m-%d %H:%M")
     slots = []
@@ -166,7 +161,6 @@ def appointment():
         slots.append(start.strftime("%H:%M"))
         start += timedelta(minutes=15)
 
-    # Remove already booked slots
     cur.execute("""SELECT strftime('%H:%M', AppointmentDate) 
                    FROM Appointments 
                    WHERE DoctorName=? AND date(AppointmentDate)=?""",
@@ -174,7 +168,6 @@ def appointment():
     booked = [row[0] for row in cur.fetchall()]
     available_times = [s for s in slots if s not in booked]
 
-    # Fetch current user's appointments
     my_appointments = []
     if "username" in session:
         cur.execute("""SELECT AppointmentID, DoctorName, AppointmentDate
