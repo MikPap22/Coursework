@@ -6,7 +6,7 @@ import hashlib
 app = Flask(__name__)
 app.secret_key = "random"
 
-con = sqlite3.connect("main.db")
+con = sqlite3.connect("main.db", timeout=30)
 cur = con.cursor()
 cur.execute(""" CREATE TABLE IF NOT EXISTS Users ( 
                 UserName VARCHAR(10) NOT NULL PRIMARY KEY,
@@ -27,11 +27,11 @@ cur.execute(""" CREATE TABLE IF NOT EXISTS Reviews (
 
 
 cur.execute (""" CREATE TABLE IF NOT EXISTS Appointments (
-                AppointmentID INTEGER PRIMARY KEY AUTOINCREMENT,
-                UserName VARCHAR(10) NOT NULL,
-                DoctorName VARCHAR(50) NOT NULL,
-                AppointmentDate DATE NOT NULL,
-                FOREIGN KEY (UserName) REFERENCES Users(UserName)
+                 AppointmentID INTEGER PRIMARY KEY AUTOINCREMENT,
+                 UserName VARCHAR(10) NOT NULL,
+                 DoctorName VARCHAR(50) NOT NULL,
+                 AppointmentDate DATE NOT NULL,
+                 FOREIGN KEY (UserName) REFERENCES Users(UserName)
                 )""")
 con.commit()
 con.close() 
@@ -42,7 +42,7 @@ def signup():
         return render_template("authorisedUsers/signup.html")
     else:
         
-        con = sqlite3.connect("main.db")
+        con = sqlite3.connect("main.db", timeout=30)
         cur = con.cursor()
         hash=hashlib.sha256(request.form["password"].encode()).hexdigest()
         cur.execute(""" INSERT INTO Users(UserName, UserFirstName, UserSurname, UserEmail, UserPassword)
@@ -60,7 +60,7 @@ def login():
     else:
         next_page = request.form.get("next") or "/reviews"
 
-        con = sqlite3.connect("main.db")
+        con = sqlite3.connect("main.db", timeout=30)
         cur = con.cursor()
         hash = hashlib.sha256(request.form["password"].encode()).hexdigest()
         cur.execute("SELECT * FROM Users WHERE UserName=? AND UserPassword=?",
@@ -86,7 +86,7 @@ def password():
         confirm_password = request.form.get("confirm_password")
         if password != confirm_password:
             return "Passwords do not match!"
-        con = sqlite3.connect("main.db")
+        con = sqlite3.connect("main.db", timeout=30)
         cur = con.cursor()
         hash = hashlib.sha256(password.encode()).hexdigest()
         cur.execute(""" UPDATE Users SET UserPassword=? WHERE UserName=?""",
@@ -111,7 +111,7 @@ def doctors():
 
 @app.route("/appointment", methods=["GET", "POST"])
 def appointment():
-    con = sqlite3.connect("main.db")
+    con = sqlite3.connect("main.db", timeout=30)
     con.row_factory = sqlite3.Row
     cur = con.cursor()
 
@@ -207,7 +207,7 @@ def reviews():
               username = session["username"]
 
               if rating and comment:
-                   con = sqlite3.connect("main.db")
+                   con = sqlite3.connect("main.db", timeout=30)
                    cur = con.cursor()
                    cur.execute("""INSERT INTO Reviews (UserName, Comment, StarRating) 
                                   VALUES (?, ?, ?)""", (username, comment, int(rating)))
@@ -231,7 +231,7 @@ def allreviews():
         comment = request.form.get("comment")
         username = session["username"]
 
-        con = sqlite3.connect("main.db")
+        con = sqlite3.connect("main.db", timeout=30)
         cur = con.cursor()
         cur.execute("SELECT UserFirstName, UserSurname FROM Users WHERE UserName=?", (username,))
         result = cur.fetchone()
@@ -239,7 +239,7 @@ def allreviews():
 
         fname, lname = result if result else ("Unknown", "User")
 
-        con = sqlite3.connect("main.db")
+        con = sqlite3.connect("main.db", timeout=30)
         cur = con.cursor()
         cur.execute("""INSERT INTO Reviews (UserName, UserFirstName, UserSurname, Comment, StarRating)
                        VALUES (?, ?, ?, ?, ?)""",
@@ -251,7 +251,7 @@ def allreviews():
 
     else:
 
-        con = sqlite3.connect("main.db")
+        con = sqlite3.connect("main.db", timeout=30)
         con.row_factory = sqlite3.Row
         cur = con.cursor()
         cur.execute("""SELECT Users.UserFirstName, Reviews.StarRating, Reviews.Comment 
