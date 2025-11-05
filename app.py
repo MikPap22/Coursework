@@ -1,13 +1,18 @@
+#Imports and initial setup
 from flask import Flask, render_template, request, session,redirect
 from datetime import datetime, timedelta
 import sqlite3
 import hashlib
 
+#Flask app configuration
 app = Flask(__name__)
 app.secret_key = "random"
 
+#Database initialization
 con = sqlite3.connect("main.db", timeout=30)
 cur = con.cursor()
+
+#Users Table
 cur.execute(""" CREATE TABLE IF NOT EXISTS Users ( 
                 UserName VARCHAR(10) NOT NULL PRIMARY KEY,
                 UserFirstName VARCHAR(30) NOT NULL,
@@ -16,7 +21,7 @@ cur.execute(""" CREATE TABLE IF NOT EXISTS Users (
                 UserPassword VARCHAR(20) NOT NULL 
                 )""")
 
-
+#Reviews Table
 cur.execute(""" CREATE TABLE IF NOT EXISTS Reviews ( 
                 ReviewID INTEGER PRIMARY KEY AUTOINCREMENT,
                 UserName VARCHAR(10) NOT NULL,
@@ -25,7 +30,7 @@ cur.execute(""" CREATE TABLE IF NOT EXISTS Reviews (
                 FOREIGN KEY (UserName) REFERENCES Users(UserName)
                 )""")
 
-
+#Appointments Table
 cur.execute (""" CREATE TABLE IF NOT EXISTS Appointments (
                  AppointmentID INTEGER PRIMARY KEY AUTOINCREMENT,
                  UserName VARCHAR(10) NOT NULL,
@@ -36,6 +41,7 @@ cur.execute (""" CREATE TABLE IF NOT EXISTS Appointments (
 con.commit()
 con.close() 
 
+#Signup route
 @app.route("/signup", methods=["GET","POST"])
 def signup():
     if request.method == "GET":
@@ -53,6 +59,7 @@ def signup():
 
         return "signup success"
 
+#Login route
 @app.route("/login", methods=["GET","POST"])
 def login():
     if request.method == "GET":
@@ -74,6 +81,7 @@ def login():
         else:
             return "login failed"
 
+#Password update route
 @app.route("/password", methods = ["GET","POST"])
 def password():
     if request.method == "GET":
@@ -95,12 +103,13 @@ def password():
         con.close()
         return "password updated successfully"
 
-
+#Logout route
 @app.route("/logout")
 def logout():
      session.pop("username", None)
      return render_template("authorisedUsers/homepage.html")
 
+#Basic page routes
 @app.route("/")
 def home():
      return render_template("pages/homepage.html")
@@ -109,6 +118,15 @@ def home():
 def doctors():
      return render_template("pages/doctors.html")
 
+@app.route("/contact")
+def contact():
+     return render_template("pages/contact.html")
+
+@app.route("/services")
+def services():
+     return render_template("pages/services.html")
+
+#Appointment booking route
 @app.route("/appointment", methods=["GET", "POST"])
 def appointment():
     con = sqlite3.connect("main.db", timeout=30)
@@ -117,6 +135,7 @@ def appointment():
 
     message = None
 
+    #Cancel appointment
     if request.method == "POST" and "cancel_id" in request.form and "username" in session:
         cancel_id = request.form.get("cancel_id")
         cur.execute("DELETE FROM Appointments WHERE AppointmentID=? AND UserName=?",
@@ -124,6 +143,7 @@ def appointment():
         con.commit()
         message = "Appointment cancelled."
 
+    #Book appointment
     elif request.method == "POST" and "username" in session:
         doctor = request.form.get("doctor")
         date = request.form.get("date")
@@ -151,6 +171,7 @@ def appointment():
             con.commit()
             message = "Appointment booked successfully!"
 
+    #Generate available time slots
     date = request.args.get("date") or datetime.now().strftime("%Y-%m-%d")
     doctor = request.args.get("doctor") or "Dr. Smith"
 
@@ -168,6 +189,7 @@ def appointment():
     booked = [row[0] for row in cur.fetchall()]
     available_times = [s for s in slots if s not in booked]
 
+    #Retrieve User appointments
     my_appointments = []
     if "username" in session:
         cur.execute("""SELECT AppointmentID, DoctorName, AppointmentDate
@@ -186,16 +208,14 @@ def appointment():
                            chosen_date=date,
                            chosen_doctor=doctor)
 
+#AI Assistant route
 @app.route("/assistant")
 def assistant():
      import os
      api_chat = os.environ.get("API_KEY", "")
      return render_template("pages/assistant.html", api_key=api_chat)
 
-@app.route("/contact")
-def contact():
-     return render_template("pages/contact.html")
-
+#User reviews route
 @app.route("/reviews", methods=["GET", "POST"])
 def reviews():
          if "username" not in session:
@@ -215,10 +235,8 @@ def reviews():
                    con.close()
                    return render_template("pages/reviews.html", message="Review submitted successfully")
          return render_template("pages/reviews.html")
-@app.route("/services")
-def services():
-     return render_template("pages/services.html")
 
+#View all reviews route
 @app.route("/allreviews")
 def allreviews():
 
@@ -268,7 +286,7 @@ def allreviews():
 
 
 
-
+#Run the application
 if __name__ == "__main__":
     app.run(debug = True)
 
