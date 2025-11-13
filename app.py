@@ -110,6 +110,7 @@ def logout():
      return render_template("authorisedUsers/homepage.html")
 
 #Basic page routes
+#Homepage route
 @app.route("/")
 def home():
      return render_template("pages/homepage.html")

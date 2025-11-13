@@ -1,7 +1,8 @@
 <action ="/">
-
+<!-- Page setup and styles -->
 <head>
     <style>
+    /* Page layout, centering content and background image */
     body {
         display: flex;
         text-align: center;
@@ -12,6 +13,7 @@
         background-repeat:no-repeat;
         background-position:left bottom;     
         }
+    /* Styling for buttons */
     button {
         height:50px;
         width:200px;
@@ -20,37 +22,42 @@
         border: none;
         border-radius: 15px;
         }
+    /* Styling for the main heading */
     h1 {font-size:100px;
         color:#28A251;
         font-family: Georgia;}
     </style>
 </head>
 <body>
+<!-- Main Heading -->
 <h1>Doctor Help</h1> 
 
 
-    
+<!-- Health Assistant Button -->    
 <p>
     <button onclick="window.location.href='/assistant';">Health Assistant</button>
 </p>
-
+<!-- Doctors page buton-->
 <p>
     <button onclick="window.location.href='/doctors';">Doctors</button>
 </p>
-
+<!-- Services and Specialties page button-->
 <p>
     <button onclick="window.location.href='/services';">Services & Specialities</button>
 </p>
-
+<!-- Appointment page button-->
 <p>
     <button onclick="window.location.href='/appointment';">Appointment</button>
 </p>
-
+<!-- Contact Info page button-->
 <p>
     <button onclick="window.location.href='/contact';">Contact Info</button>
 </p>
-
+<!-- Reviews page button-->
 <p>
     <button onclick="window.location.href='/allreviews';">Reviews</button>
 </p>
 </body>
+
+
+
