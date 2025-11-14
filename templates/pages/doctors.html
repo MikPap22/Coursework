@@ -1,9 +1,13 @@
 <action = "/doctors">
+
 <head>
-
+    <!-- Linking external menu bar CSS -->
     <link rel="stylesheet" href="/static/pages/menubarstyle.css">
-
+    
+    <!-- Page-wide CSS for layout, text, doctors, modals -->
     <style>
+        
+    /* General body styling */
     body {
         font-family: Arial, sans-serif;
         margin: 20px;
@@ -11,12 +15,14 @@
         text-align: center ;
     }
 
+    /* Title styling */
     h1 {
         margin-top: 200px;
         color: #28A251;
 
     }
 
+    /* Search bar styling */
     #searchBar {
         margin: 20px auto;
         padding: 10px;
@@ -26,6 +32,7 @@
         font-size: 16px;
     }
 
+    /* Flex layout for doctor cards */
     .doctor-list {
         display: flex;
         justify-content: center;
@@ -34,6 +41,7 @@
         margin-top: 40px;
     }
 
+    /* Doctor card basic style */
     .doctor-card {
         background: #f9f9f9;
         border: 1px solid #ddd;
@@ -45,11 +53,13 @@
         transition: transform 0.2s;
     }
 
+    /* Card hover effect */
     .doctor-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
 
+    /* Doctor image format */
     .doctor-card img {
         width: 100%;
         height: auto;
@@ -57,7 +67,7 @@
         margin-bottom: 10px;
     }
 
-
+    /* Modal background overlay */
     .modal {
         display: none;
         position: fixed;
@@ -69,6 +79,7 @@
         align-items: center;
     }
 
+    /* Modal content box */
     .modal-content {
         background: white;
         padding: 20px;
@@ -78,6 +89,7 @@
         position: relative;
     }
 
+    /* Close button for modals */
     .close {
         position: absolute;
         top: 10px; right: 15px;
@@ -85,11 +97,13 @@
         cursor: pointer;
     }
 
+    /* Modal title styling */
     .modal h2 {
         color: #28A251;
         margin-top: 0;
     }
 
+    /* Buttons inside modal */
     .modal .button {
         display: inline-block;
         padding: 10px 20px;
@@ -103,16 +117,20 @@
     }
     </style>
 
+    <!-- JavaScript for modals, search filter, URL hash navigation -->
     <script>
 
+    // Opens a specific modal using its ID
     function openModal(id) {
         document.getElementById(id).style.display = "flex";
     }
 
+    // Closes a modal setting display to none
     function closeModal(id) {
         document.getElementById(id).style.display = "none";
     }
 
+    // Closes any modal when clicking outside content 
     window.onclick = function(event) {
         document.querySelectorAll('.modal').forEach(modal => {
             if (event.target === modal) {
@@ -121,6 +139,7 @@
         });
     }
 
+    // Search bar filter: hides doctor cards if name does not match input
     window.addEventListener("load", function() {
   document.getElementById("searchBar").addEventListener("keyup", function() {
     let filter = this.value.toLowerCase();
@@ -133,6 +152,7 @@
   });
 });
 
+    // Checking URL hash to auto-open a modal
     const hash = window.location.hash.substring(1); 
     if (hash) {
         const modal = document.getElementById(hash);
@@ -149,6 +169,7 @@
 
 <body>
 
+    <!-- Top navigation bar -->
     <nav class = "navbar">
         <ul>
             <li><a href="/">Home</a></li>
@@ -161,23 +182,29 @@
         </ul>
     </nav>
 
+    <!-- Page title -->
     <h1>Doctors</h1>
+
+    <!-- Search bar -->
     <input type="text" id="searchBar" placeholder="Search for a doctor...">
 
-
+<!-- List of clickable doctor cards -->
 <div class="doctor-list">
+    <!-- Doctor card 1 -->
     <div class="doctor-card" onclick="openModal('doc1')" data-name="Dr. Alice Johnson">
         <img src="https://mamadeti.ru/upload/iblock/bd2/yl0hqmz0x24pybbw0pwhgfefgyrti3bt/%D0%A9%D0%95%D0%A0%D0%91%D0%90%D0%9A%D0%9E%D0%92%D0%90-8441.png" alt="Dr. Alice Johnson">
         <h3>Dr. Alice Johnson</h3>
         <p>Cardiologist</p>
     </div>
 
+    <!-- Doctor card 2 -->
     <div class="doctor-card" onclick="openModal('doc2')" data-name="Dr. Mark Lee">
         <img src="https://mamadeti.ru/upload/iblock/0e7/1i1orm7oef876mcdqdfwhys28n1dis0t/%D0%96%D0%9E%D0%A0%D0%94%D0%90%D0%9D%D0%98%D0%90-6114.png" alt="Dr. Mark Lee">
         <h3>Dr. Mark Lee</h3>
         <p>Pediatrician</p>
     </div>
 
+    <!-- Doctor card 3 -->
     <div class="doctor-card" onclick="openModal('doc3')" data-name="Dr. Bob Richardson">
         <img src="https://mamadeti.ru/upload/iblock/087/4a5ofbh19qlq7djw7v9gara0x43dnw52/zadoyan.png" alt="Dr. Bob Richardson">
         <h3>Dr. Bob Richardson</h3>
@@ -185,6 +212,7 @@
     </div>
 </div>
 
+<!-- Modal 1: doctor details + links -->
 <div id="doc1" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal('doc1')">&times;</span>
@@ -198,6 +226,7 @@
     </div>
 </div>
 
+<!-- Modal 2 -->
 <div id="doc2" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal('doc2')">&times;</span>
@@ -211,6 +240,7 @@
     </div>
 </div>
 
+<!-- Modal 3 -->
 <div id="doc3" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal('doc3')">&times;</span>
