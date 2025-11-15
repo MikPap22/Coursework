@@ -1,20 +1,25 @@
 <action = "/services">
  <head>
 
+    <!-- External menu bar CSS -->
     <link rel="stylesheet" href="/static/pages/menubarstyle.css">
 
+    <!-- Internal page-specific CSS -->
     <style>
+        
+    /* Heading styling */
     h1 {
         color:#28A251;
         font-family: Georgia;
     }
-    
+    /* Body styling */
     body {
         background-color: white;
         font-family: Georgia;
         margin: 0;
         padding: 0;
     }
+    /* Page title styling */
     .title {
         color: #28A251;
         font-family: Georgia;
@@ -24,6 +29,7 @@
         max-width: 90%;
     }
 
+    /* Card grind container */
     .services {
         display: flex;
         justify-content: center;
@@ -31,7 +37,8 @@
         min-height: 500px;
         flex-wrap: wrap;
     }
-    
+
+    /* Service card styling */
     .card {
         background-color: #f9f9f9;
         border: 1px solid #ddd;
@@ -46,6 +53,7 @@
         position: relative;
     }
 
+    /* Card icon styling */
     .card h1 {
         font-family: Georgia;
         text-align: center;
@@ -53,6 +61,7 @@
         margin-bottom: 10px;
     }
 
+    /* Card button styling */
     .card .button {
         display: inline-block;
         padding: 10px 20px;
@@ -66,11 +75,13 @@
         transition: background-color 0.3s ease;
     }
 
+    /* Card hover effect */
     .card:hover {
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
         transform: translateY(-5px);
     }
 
+    /* Modal styles */
     .modal {
         display: none; 
         position: fixed; 
@@ -83,6 +94,7 @@
         background-color: rgba(0,0,0,0.5);
     }
 
+    /* Close button */
     .close {
         color: #aaa;
         float: right;
@@ -91,11 +103,12 @@
         cursor: pointer;
     }   
 
+    /* Close button hover effect */
     .close:hover {
         color: black;
     }
     
-
+    /* Modal content box */
     .modal-content {
         background-color: #fff;
         margin: 5% auto;
@@ -107,8 +120,9 @@
         box-shadow: 0 5px 20px rgba(0,0,0,0.4);
         animation: fadeIn 0.3s ease-in-out;
         line-height: 1.6;
-}
+    }
 
+    /* Modal content headings and text */
     .modal-content h2 {
         color: #28A251;
         margin-bottom: 15px;
@@ -116,19 +130,23 @@
         text-align: center;
     }
 
+    /* Subheadings */
     .modal-content h3 {
         margin-top: 20px;
         color: #333;
     }
 
+    /* Paragraphs */
     .modal-content p {
         margin-bottom: 12px;
     }
 
+    /* Lists */
     .modal-content ul {
         margin: 10px 0 20px 20px;
     }
 
+    /* Modal buttons */
     .modal-content .button {
         display: inline-block;
         padding: 10px 20px;
@@ -145,7 +163,7 @@
     </style>
 
 
-    
+<!-- JavaScript for Services and Specialties page-->    
 <script>
 function openModal(id) {
     document.getElementById(id).style.display = "block";
@@ -167,6 +185,7 @@ window.onclick = function(event) {
 
 </head>
 
+<!-- Body and navigation-->
 <body>
     
     <nav class = "navbar">
@@ -181,12 +200,15 @@ window.onclick = function(event) {
         </ul>
     </nav>
     
-    
+    <!-- Page title-->
     <div class = "title">
     <h1>Services & Specialities</h1>
     </div>
 
+    <!-- Service cards -->
     <div class = "services">
+
+        <!-- Blood diagnostics card-->
         <div class = "card">
             <i class ="icon fa fa-globe"></i>
             <h1>Blood diagnostics</h1>
@@ -201,6 +223,7 @@ window.onclick = function(event) {
             </div>
         </div>
 
+        <!-- Headache treatment card-->
         <div class = "card">
             <i class ="icon fa fa-globe"></i>
             <h1>Headache treatment</h1>
@@ -215,7 +238,7 @@ window.onclick = function(event) {
             </div>
         </div>
 
-
+        <!-- Vaccination card -->
         <div class = "card">
             <i class ="icon fa fa-globe"></i>
             <h1>Vaccination</h1>
@@ -231,6 +254,7 @@ window.onclick = function(event) {
         </div>
     </div>
 
+    <!-- Blood diagnostics modal -->
     <div id="bloodModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal('bloodModal')">&times;</span>
@@ -271,6 +295,7 @@ window.onclick = function(event) {
     </div>
 </div>
 
+<!-- Headache modal -->
 <div id="headacheModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal('headacheModal')">&times;</span>
@@ -315,6 +340,7 @@ window.onclick = function(event) {
     </div>
 </div>
 
+<!-- Vaccination modal -->
 <div id="vaccinationModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal('vaccinationModal')">&times;</span>

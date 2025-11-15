@@ -110,19 +110,23 @@ def logout():
      return render_template("authorisedUsers/homepage.html")
 
 #Basic page routes
+
 #Homepage route
 @app.route("/")
 def home():
      return render_template("pages/homepage.html")
 
+#Doctors page route
 @app.route("/doctors")
 def doctors():
      return render_template("pages/doctors.html")
 
+#Contact information page route
 @app.route("/contact")
 def contact():
      return render_template("pages/contact.html")
 
+#Services and Specialties route
 @app.route("/services")
 def services():
      return render_template("pages/services.html")
