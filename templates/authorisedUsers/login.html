@@ -1,17 +1,32 @@
 <head>
+    <!-- Linking the external stylesheet for login page styling -->
     <link rel="stylesheet" type="text/css" href="/static/pages/authorisationstyle.css">
 </head>
 
+<!-- Main hedaing for the login page -->
 <h1>Log in</h1>
 <body>
+
+    <!-- Login for container box -->
     <div class="box">
+
+        <!-- Form sends data to /login route using POST method -->
         <form method="post" action="/login">
+
+            <!-- Hidden input used to store the page the user came from -->
             <input type="hidden" name="next" value="{{ request.args.get('next', '') }}">
 
+            <!-- Username field -->
             Username: <input name="username"> <p>
+            
+            <!-- Password field -->
             Password: <input name="password" type="password"> <p>
+            
+            <!-- Submit button to log in -->
             <input type="submit">
         </form>
+
+        <!-- Link to the sign up page-->
         <a href="/signup">Sign Up</a>
     </div>
 </body>

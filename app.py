@@ -62,22 +62,36 @@ def signup():
 #Login route
 @app.route("/login", methods=["GET","POST"])
 def login():
+
+    #If user opens the login page nromally, show the login template
     if request.method == "GET":
         return render_template("authorisedUsers/login.html")
     else:
+
+        #Deterrmine where the user should be redirected after logging in
         next_page = request.form.get("next") or "/reviews"
 
+        #Connecting to the database
         con = sqlite3.connect("main.db", timeout=30)
         cur = con.cursor()
+
+        #Hashing the password, so it can be compared with the stored hashed password
         hash = hashlib.sha256(request.form["password"].encode()).hexdigest()
+        
+        #Checking database to find matching username and hashed password
         cur.execute("SELECT * FROM Users WHERE UserName=? AND UserPassword=?",
                     (request.form["username"], hash))
         user = cur.fetchone()
+
+        #Closing the database connection
         con.close()
 
+        #If user exists, create session and redirect to the internded page
         if user:
             session["username"] = request.form["username"]
-            return redirect(next_page)  
+            return redirect(next_page) 
+
+        #If credentials are incorrect, show error message 
         else:
             return "login failed"
 
