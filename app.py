@@ -44,19 +44,29 @@ con.close()
 #Signup route
 @app.route("/signup", methods=["GET","POST"])
 def signup():
+
+    #Show sign up page
     if request.method == "GET":
         return render_template("authorisedUsers/signup.html")
     else:
         
+        #Connect to database
         con = sqlite3.connect("main.db", timeout=30)
         cur = con.cursor()
+
+        #Hash password with SHA-256 for security
         hash=hashlib.sha256(request.form["password"].encode()).hexdigest()
+        
+        #Insert new user into Users table
         cur.execute(""" INSERT INTO Users(UserName, UserFirstName, UserSurname, UserEmail, UserPassword)
             VALUES (?, ?, ?, ?, ?)""", 
             (request.form["username"],request.form["userfirstname"], request.form["usersurname"], request.form["useremail"],hash))
+        
+        #Save changes and close connection
         con.commit()
         con.close()
 
+        #Success message
         return "signup success"
 
 #Login route

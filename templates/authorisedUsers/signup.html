@@ -1,3 +1,4 @@
+<!-- Simple <h1> to show page purpose -->
 <head>
     <link rel="stylesheet" type="text/css" href="/static/pages/authorisationstyle.css">
 </head>
@@ -5,15 +6,34 @@
 
 <h1>Sign Up</h1>
 <body>
+
+<!-- Wraps the form for styling -->
 <div class = "box">
-<form method="post" action = "/signup">
+
+<!-- Sends data to /signup using POST -->
+    <form method="post" action = "/signup">
+
+<!-- Username input -->
 Username: <input name="username"> <p></p>
+
+<!-- First name input -->
 First Name: <input name="userfirstname"> <p></p>
+
+<!-- Surname input -->
 Surname: <input name="usersurname"> <p></p>
+
+<!-- Email input -->
 Email: <input name="useremail"> <p></p>
+
+<!-- Password input -->
 Password: <input name="password" type ="password"> <p></p>
+
+<!-- Submit button -->
 <input type = "submit">
+
 </form>
+
+<!-- Link to log in page -->
 <a href ="/login">Log In</a>
 </div
 </body>
