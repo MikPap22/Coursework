@@ -108,23 +108,36 @@ def login():
 #Password update route
 @app.route("/password", methods = ["GET","POST"])
 def password():
+    #Session check prevents unauthorised access
     if request.method == "GET":
         if "username" in session:
             return render_template("authorisedUsers/password.html")
         else:
+            #If no session exists, redirect to login page
             return render_template("authorisedUsers/login.html")
     else:
+        #Retrieve both password fields password from form submission
         password = request.form.get("password")
         confirm_password = request.form.get("confirm_password")
+        
+        #Ensure both passwords match
         if password != confirm_password:
             return "Passwords do not match!"
+        
+        #Connect to database to update password
         con = sqlite3.connect("main.db", timeout=30)
         cur = con.cursor()
+
+        #Hash password using SHA-256 for security
         hash = hashlib.sha256(password.encode()).hexdigest()
         cur.execute(""" UPDATE Users SET UserPassword=? WHERE UserName=?""",
                     (hash, session["username"]))
+        
+        #Saves changes and closes connection
         con.commit()
         con.close()
+
+        #Success message
         return "password updated successfully"
 
 #Logout route
