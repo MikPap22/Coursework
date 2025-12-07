@@ -1,9 +1,12 @@
 <action = "/assistant">
 <head>
     
+    <!-- Navigation bar stylesheet -->
     <link rel="stylesheet" href="/static/pages/menubarstyle.css">
     
     <style>
+
+        /* Reset and consistent font across this page */
         * {
             margin: 0;
             padding: 0;
@@ -11,6 +14,7 @@
             font-family: Georgia;
         }
 
+        /* Main body layout for centering the chat container */
         body { 
             background-color: #f0f8ff; 
             height: 100vh;
@@ -22,6 +26,7 @@
             justify-content: center;
         }
 
+        /* Wrapper to center the chat container */
         .center-wrapper {
             flex: 1;
             display: flex;
@@ -30,6 +35,7 @@
             width: 100vw;
         }
 
+        /* Main chat container styling */
         .container { 
             background-color: white;
             width: 25rem; 
@@ -44,12 +50,15 @@
             flex-direction: column;
         }
 
+        /* Header styling */
         .header {
             background: whitesmoke;
             padding: 1rem;
             text-align: center;
             color: #28A251
         }
+
+        /* Chat scrollable content area */
         .content {
             padding: 1rem;
             height: 100%;
@@ -59,6 +68,7 @@
             overflow: auto;
         }
 
+        /* Chat form at the bottom */
         .chat-form {
             border-top: 1px solid #F2F2F2;
             padding: 1rem;
@@ -68,6 +78,7 @@
             width: 100%;
         }
 
+        /* Assitant message bubble */
         .answer-section {
             background: rgb(235, 235, 235);
             padding: 0.5rem;
@@ -79,6 +90,7 @@
             white-space: pre-wrap;
         }
 
+        /* User message bubble */
         .question-section {
             background: blue;
             color: white;
@@ -89,6 +101,7 @@
             overflow-wrap: anywhere;
         }
 
+        /* User input field */
         .chat-input {
             outline: none;
             border: none;
@@ -96,6 +109,7 @@
             height: 2.5rem;
         }
 
+        /* Send button and inactive variant */
         .send-button {
             background: blue; 
             border: none;
@@ -116,31 +130,39 @@
             pointer-events: none;
         }
 
+        /* Button click feedback */
         .send-button:active {
             transform: scale(0.9);
         }
     </style>
 
     <script> 
+
+        /* API key injected from Flask backend */
         const API_KEY = '{{ api_key }}';
         
     document.addEventListener("DOMContentLoaded", () => {
+
+        /* Reference to key UI elements */
         const sendButton = document.getElementById("sendButton");
         const chatInput = document.getElementById("chatInput");
         const content = document.getElementById("content");
 
+        /* State variable for chat logic */
         let isAnswerLoading = false;
         let answerSectionId = 0;
 
-
+        /* Button triggers message sending */
         sendButton.addEventListener("click", () => handleSendMessage());
+        
+        /* Allow pressing Enter to send message */
         chatInput.addEventListener("keypress", event => {
             if (event.key === "Enter") {
                 handleSendMessage();
             }
         });
 
-
+        /*Handle sending a question */
         function handleSendMessage() {
             const question = chatInput.value.trim();
 
@@ -152,7 +174,8 @@
             chatInput.value = "";
 
         }
-            
+        
+        /* Fetch AI response from OpenRouter */
         function getAnswer(question) { 
             const fetchData = 
             fetch("https://openrouter.ai/api/v1/chat/completions", {
@@ -172,7 +195,8 @@
         })
     });
     
-fetchData.then(response => response.json())
+    /* Process returned answer */
+    fetchData.then(response => response.json())
     .then(data => {
         const resultData =  data.choices[0].message.content;
         isAnswerLoading = false;
@@ -183,6 +207,7 @@ fetchData.then(response => response.json())
         });
     }     
 
+    /* Add user's message to UI */
     function addQuestionSection(message) {
         isAnswerLoading = true;
         const sectionElement = document.createElement('section');
@@ -194,6 +219,7 @@ fetchData.then(response => response.json())
         scrollToBottom();
     }
 
+    /* Add assistant response or loading animation */
     function addAnswerSection(message) {
         if (isAnswerLoading) {
             answerSectionId++;
@@ -215,11 +241,13 @@ fetchData.then(response => response.json())
         
     }
 
+    /* Loading animation display */
     function getLoadingSvg() {
         return '<svg style="height: 25px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle fill="#4F6BFE" stroke="#4F6BFE" stroke-width="15" r="15" cx="40" cy="65"><animate attributeName="cy" calcMode="spline" dur="2" values="65;135;65;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="-.4"></animate></circle><circle fill="#4F6BFE" stroke="#4F6BFE" stroke-width="15" r="15" cx="100" cy="65"><animate attributeName="cy" calcMode="spline" dur="2" values="65;135;65;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="-.2"></animate></circle><circle fill="#4F6BFE" stroke="#4F6BFE" stroke-width="15" r="15" cx="160" cy="65"><animate attributeName="cy" calcMode="spline" dur="2" values="65;135;65;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="0"></animate></circle></svg>'
     }
     });
 
+    /* Auto-scroll chat window */
     function scrollToBottom() {
         content.scrollTo ({
             top: content.scrollHeight,
@@ -227,17 +255,12 @@ fetchData.then(response => response.json())
         });
 
     }
-
-
-
-
-
-
     </script>
 </head>
 
 <body>
 
+    <!-- Reusable navigation bar -->
     <nav class = "navbar">
         <ul>
             <li><a href="/">Home</a></li>
@@ -250,17 +273,23 @@ fetchData.then(response => response.json())
         </ul>
     </nav>
 
-
+    <!-- Main chat container -->
         <main class="container">
             <header class="header">
                 <h2 style="font-size:2.5rem">Health Assistant</h2>
             </header>
+
+            <!-- Chat history area -->
             <div class="content" id="content">
                 <section class="answer-section">Hello! I'm your Health Assistant. How can I help you today?</section>
             </div>
+
+            <!-- Chat input and send button -->
             <footer class="chat-form">
                 <input class="chat-input" id="chatInput" type="text" placeholder="Type your message..." autocomplete="off">
                 <button class="send-button" id="sendButton">
+                   
+                    <!-- Send button SVG -->
                      <svg width="66px" height="66px" viewBox="0 0 24.00 24.00" xmlns="http://www.w3.org/2000/svg" id="send" class="icon glyph" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M21.66,12a2,2,0,0,1-1.14,1.81L5.87,20.75A2.08,2.08,0,0,1,5,21a2,2,0,0,1-1.82-2.82L5.46,13H11a1,1,0,0,0,0-2H5.46L3.18,5.87A2,2,0,0,1,5.86,3.25h0l14.65,6.94A2,2,0,0,1,21.66,12Z" style="fill:white"></path></g></svg>
                 </button>
             </footer>
