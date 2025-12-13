@@ -28,6 +28,53 @@
         border-radius: 15px;
         }
     
+    table {
+        border-collapse: collapse;
+        background: linear-gradient(135deg, #ffffff 0%, #f9f9f9 100%);
+        box-shadow: 0px 8px 16px rgba(40, 162, 81, 0.15);
+        border-radius: 12px;
+        overflow: hidden;
+        max-width: 900px;
+        margin: 20px auto;
+        border: 2px solid #28A251;
+    }
+    
+    thead {
+        background: linear-gradient(90deg, #28A251 0%, #1f7a3a 100%);
+        color: white;
+    }
+    
+    th {
+        padding: 18px 25px;
+        text-align: left;
+        font-weight: bold;
+        font-family: Georgia;
+        font-size: 16px;
+        letter-spacing: 0.5px;
+    }
+    
+    td {
+        padding: 15px 25px;
+        border-bottom: 1px solid #d4e8dd;
+        font-family: Georgia;
+        font-size: 14px;
+    }
+    
+    tbody tr {
+        background-color: white;
+        transition: all 0.3s ease;
+    }
+    
+    tbody tr:hover {
+        background-color: #e8f5e9;
+        transform: scale(1.01);
+        box-shadow: inset 0px 0px 8px rgba(40, 162, 81, 0.1);
+    }
+    
+    tbody tr:last-child td {
+        border-bottom: none;
+    }
+    
 
     </style>
     </head> 
