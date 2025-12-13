@@ -1,7 +1,11 @@
 <action = "/allreviews">
 <head>
+
+    <!-- Navigation bar stylesheet shared across pages -->
     <link rel="stylesheet" href="/static/pages/menubarstyle.css">
     <style>
+        
+        /* Page heading styling */
     h1 {
         color:#28A251;
         font-family: Georgia;
@@ -9,6 +13,8 @@
         align-items: center;
         justify-content: center;
     }
+
+    /* General body styling and background image */
     body {
         display: flex;
         text-align: center;
@@ -19,6 +25,8 @@
         background-repeat:no-repeat;
         background-position:left bottom;     
         }
+    
+    /* Button styling used for adding a review */
     button {
         height:50px;
         width:200px;
@@ -28,6 +36,7 @@
         border-radius: 15px;
         }
     
+    /* Reviews table styling */
     table {
         border-collapse: collapse;
         background: linear-gradient(135deg, #ffffff 0%, #f9f9f9 100%);
@@ -39,11 +48,13 @@
         border: 2px solid #28A251;
     }
     
+    /* Table header row styling */
     thead {
         background: linear-gradient(90deg, #28A251 0%, #1f7a3a 100%);
         color: white;
     }
     
+    /* Header cell styling */
     th {
         padding: 18px 25px;
         text-align: left;
@@ -53,6 +64,7 @@
         letter-spacing: 0.5px;
     }
     
+    /* Table data cell styling */
     td {
         padding: 15px 25px;
         border-bottom: 1px solid #d4e8dd;
@@ -60,11 +72,13 @@
         font-size: 14px;
     }
     
+    /* Row hover interaction styling */
     tbody tr {
         background-color: white;
         transition: all 0.3s ease;
     }
     
+    /* Row hover interaction effects */
     tbody tr:hover {
         background-color: #e8f5e9;
         transform: scale(1.01);
@@ -81,6 +95,7 @@
 
 <body>
 
+    <!-- Navigation bar linking all main routes -->
     <nav class = "navbar">
         <ul>
             <li><a href="/">Home</a></li>
@@ -93,63 +108,48 @@
         </ul>
     </nav>
 
-
+    <!-- Page title -->
     <h1>Reviews</h1>
 
+<!-- Button redirecting users to sign up before leaving a review -->
 <div>
     <button onclick="window.location.href='/signup';">Your Review</button>
 </div> 
 
+<!-- Jinja condition: checks if reviews exist -->
 {% if reviews %}
 
     <h2 style="margin-top: 30px;">All Reviews</h2>
 
+    <!-- Reviews display table -->
     <table border="1" cellpadding="10" style="margin-top:10px;">
 
         <thead>
-
             <tr>
-
                 <th>Name</th>
-
                 <th>Rating</th>
-
                 <th>Comment</th>
-
             </tr>
-
         </thead>
-
         <tbody>
 
             {% for review in reviews %}
 
                 <tr>
-
                     <td>{{ review['UserFirstName'] }} </td>
-
                     <td>{{ review['StarRating'] }} ⭐</td>
-
                     <td>{{ review['Comment'] }}</td>
-
                 </tr>
 
             {% endfor %}
-
         </tbody>
-
     </table>
 
 {% else %}
 
+    <!-- Message shown when no reviews exist -->
     <p>No reviews yet.</p>
 
 {% endif %}
-
-
-
-
-
-
 
 </body>

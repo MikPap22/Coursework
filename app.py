@@ -282,15 +282,19 @@ def reviews():
 @app.route("/allreviews")
 def allreviews():
 
+    #Handle review submission
     if request.method == "POST":
 
+        #Ensures user is logged in before submitting a review
         if "username" not in session:
             return render_template("pages/login.html")
  
+        #Retrieve form data
         rating = request.form.get("rating")
         comment = request.form.get("comment")
         username = session["username"]
 
+        #Fetch user's name from Users table
         con = sqlite3.connect("main.db", timeout=30)
         cur = con.cursor()
         cur.execute("SELECT UserFirstName, UserSurname FROM Users WHERE UserName=?", (username,))
@@ -299,6 +303,7 @@ def allreviews():
 
         fname, lname = result if result else ("Unknown", "User")
 
+        #Insert new review into Reviews table
         con = sqlite3.connect("main.db", timeout=30)
         cur = con.cursor()
         cur.execute("""INSERT INTO Reviews (UserName, UserFirstName, UserSurname, Comment, StarRating)
@@ -309,11 +314,14 @@ def allreviews():
 
         return render_template("pages/allreviews.html")  
 
+    #Handle page load
     else:
 
         con = sqlite3.connect("main.db", timeout=30)
         con.row_factory = sqlite3.Row
         cur = con.cursor()
+
+        #Retrieve all reviews with user names
         cur.execute("""SELECT Users.UserFirstName, Reviews.StarRating, Reviews.Comment 
                    FROM Reviews, Users
                    WHERE (Reviews.UserName = Users.UserName) 
