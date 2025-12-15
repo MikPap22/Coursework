@@ -260,14 +260,18 @@ def assistant():
 #User reviews route
 @app.route("/reviews", methods=["GET", "POST"])
 def reviews():
+         
+         #Ensure only logged in users can submit reviews
          if "username" not in session:
             return render_template("authorisedUsers/login.html")
          
+         #Handle review submission
          if request.method == "POST": 
               rating = request.form.get("rating")
               comment = request.form.get("review")
               username = session["username"]
 
+              #Insert review only if all fields are provided     
               if rating and comment:
                    con = sqlite3.connect("main.db", timeout=30)
                    cur = con.cursor()
@@ -276,6 +280,8 @@ def reviews():
                    con.commit()
                    con.close()
                    return render_template("pages/reviews.html", message="Review submitted successfully")
+            
+        #Render review form on GET request
          return render_template("pages/reviews.html")
 
 #View all reviews route

@@ -1,18 +1,29 @@
 <action = "/reviews">
+
 <head>
+
+    <!-- Shared navigation bar stylesheet -->
     <link rel = "stylesheet" href = "static/pages/menubarstyle.css">
+    
+    <!-- Font a\Awesome for star icons-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" crossorigin="anonymous" />
     <style>
+    
+    /* Page heading styling */
     h1 {
         color:#28A251;
         font-family: Georgia;
     }
+
+    /* Global reset for consistent layout */
     *{ 
         margin: 0;
         padding:0;
         box-sizing:border-box;
         font-family:"Poppins",Georgia;
     }
+
+    /* Center page content */
     html,body{
         display: grid;
         height:100%;
@@ -20,6 +31,8 @@
         text-align: center;
         background: white;
     }
+
+    /* Main review form container */
     .container{
         position: relative;
         width: 400px;
@@ -32,14 +45,18 @@
         justify-content: center;
         flex-direction: column;
     }
+
+    /* Confirmation message after submitting review */
     .container .post{
         display: none;
     }
+
     .container .text{
         font-size: 25px;
         color: #666;
         font-weight: 500;
     }
+
     .container .edit{
         position: absolute;
         right: 10px;
@@ -49,18 +66,25 @@
         font-weight: 500;
         cursor:pointer;
     }
+
     .container .edit:hover{
         text-decoration: underline;
     }
+
+    /* Star rating widget styling */
     .star-widget {
         display: flex;
         flex-direction: row-reverse;
         justify-content: center;
         margin-bottom: 10px;
     }
+
+    /* Hide default radio buttons */
     .star-widget input[type="radio"] {
         display: none;
     }
+
+    /* Star icons styling */
     .star-widget label {
         font-size: 40px;
         color: rgb(180, 180, 180);
@@ -68,16 +92,22 @@
         cursor: pointer;
         transition: color 0.2s;
     }
+
+    /* Highlight selected and hovered stars */
     .star-widget input[type="radio"]:checked ~ label,
     .star-widget label:hover,
     .star-widget label:hover ~ label {
         color: #fd4;
     }
+
+    /* Textarea styling */
     .textarea{
         height: 100px;
         width: 100%;
         overflow: hidden;
     }
+
+    /* Review text area */
     .textarea textarea{
         height: 100%;
         width: 100%;
@@ -89,11 +119,15 @@
         font-size: 17px;
         resize: none;
     }
+
+    /* Submit button styling */
     .btn{
         height: 45px;
         width: 100%;
         margin: 15px 0;
     }
+
+    /* Submit button */
     .btn button{
         height: 100%;
         width: 100%;
@@ -107,10 +141,14 @@
         cursor:pointer;
         transition: all 0.3s ease;
     }
+
+    /* Submit button hover effect */
     .btn button:hover{
         background: #1b1b1b;
         color: #fff;
     }
+
+    /*Action buttons for user account options */
     .action-buttons {
         margin-top: 10px;
         margin-bottom: 20px;
@@ -134,6 +172,7 @@
 </head>
 <body>
 
+<!-- Navigation bar -->
 <nav class = "navbar">
         <ul>
             <li><a href="/">Home</a></li>
@@ -146,19 +185,26 @@
         </ul>
     </nav>
 
+<!-- Page heading -->
 <h1>Your Review</h1>
 
+<!-- User account actions-->
 <div class="action-buttons">
     <a href="/password" class="btn-link">Change Password</a>
     <a href="/logout" class="btn-link">Logout</a>
 </div>
 
+<!-- Review submission form -->
 <div class="container">
     <div class="post">
         <div class="text">Thanks for rating us!</div>
         <div class="edit">EDIT</div>
     </div>
+
+    <!-- Review form -->
     <form action="/reviews" method="POST">
+
+        <!-- Star rating input -->
         <div class="star-widget">
             <input type="radio" name="rating" id="rate-5" value="5">
             <label for="rate-5" class="fas fa-star"></label>
@@ -171,9 +217,13 @@
             <input type="radio" name="rating" id="rate-1" value="1">
             <label for="rate-1" class="fas fa-star"></label>
         </div>
+
+        <!-- Review text input -->
         <div class="textarea">
             <textarea name="review" placeholder="Write your review here..." required></textarea>
         </div>
+
+        <!-- Submit review -->
         <div class="btn">
             <button type="submit">POST</button>
         </div>
