@@ -171,6 +171,8 @@ def services():
 #Appointment booking route
 @app.route("/appointment", methods=["GET", "POST"])
 def appointment():
+
+    #Connect to database
     con = sqlite3.connect("main.db", timeout=30)
     con.row_factory = sqlite3.Row
     cur = con.cursor()
@@ -191,6 +193,7 @@ def appointment():
         date = request.form.get("date")
         time = request.form.get("time")
 
+        #Convert date and time into datetime format 
         try:
             appointment_datetime = datetime.strptime(f"{date} {time}", "%Y-%m-%d %H:%M")
         except ValueError:
@@ -201,12 +204,15 @@ def appointment():
                                    appointments=[],
                                    logged_in="username" in session)
 
+        #Check if the selected time slot is already booked
         cur.execute("""SELECT 1 FROM Appointments 
                        WHERE DoctorName=? AND AppointmentDate=?""",
                     (doctor, appointment_datetime))
         if cur.fetchone():
             message = "That time slot is already booked!"
         else:
+
+            #Insert new appointment into Appointments table
             cur.execute("""INSERT INTO Appointments(UserName, DoctorName, AppointmentDate)
                            VALUES (?, ?, ?)""",
                         (session["username"], doctor, appointment_datetime))
@@ -215,7 +221,7 @@ def appointment():
 
     #Generate available time slots
     date = request.args.get("date") or datetime.now().strftime("%Y-%m-%d")
-    doctor = request.args.get("doctor") or "Dr. Smith"
+    doctor = request.args.get("doctor") or "Dr. Alice Johnson"
 
     start = datetime.strptime(date + " 09:00", "%Y-%m-%d %H:%M")
     end = datetime.strptime(date + " 17:00", "%Y-%m-%d %H:%M")
@@ -223,7 +229,7 @@ def appointment():
     while start < end:
         slots.append(start.strftime("%H:%M"))
         start += timedelta(minutes=15)
-
+    #Remove already boooked slots
     cur.execute("""SELECT strftime('%H:%M', AppointmentDate) 
                    FROM Appointments 
                    WHERE DoctorName=? AND date(AppointmentDate)=?""",
@@ -240,8 +246,10 @@ def appointment():
                        ORDER BY AppointmentDate ASC""",
                     (session["username"],))
         my_appointments = cur.fetchall()
-
+    
     con.close()
+
+    #Render appointment page with data
     return render_template("pages/appointment.html",
                            available_times=available_times,
                            appointments=my_appointments,

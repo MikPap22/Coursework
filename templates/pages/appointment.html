@@ -1,7 +1,11 @@
 <head>
+
+    <!-- Link to shared navigation bar stylesheet-->
     <link rel="stylesheet" href="/static/pages/menubarstyle.css">
     
     <style>
+
+        /* Main page styling */
         body {
             font-family: Georgia, serif;
             background: #f0f8ff;
@@ -14,12 +18,14 @@
             padding-top: 120px; 
         }
 
+        /* Page heading styling */
         h1 {
             color: #28A251;
             margin-bottom: 20px;
             text-align: center;
         }
 
+        /* Main content container */
         .container {
             width: 800px; 
             background: white;
@@ -29,12 +35,14 @@
             box-shadow: 0px 8px 20px rgba(0,0,0,0.1);
         }
 
+        /* Form labels */
         label {
             font-weight: bold;
             display: inline-block;
             margin: 10px 0 5px;
         }
 
+        /* Dropdowns and date picker */
         select, input[type="date"] {
             padding: 10px 14px;
             border-radius: 12px;
@@ -44,6 +52,7 @@
             width: 100%;
         }
 
+        /* Buttons styling */
         button {
             height: 50px;
             width: 200px;
@@ -55,11 +64,13 @@
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
+        /* Button hover effects */
         button:hover {
             transform: scale(1.04);
             box-shadow: 0px 4px 10px rgba(0,0,0,0.15);
         }
 
+        /* Available time slotys layout */
         .times-grid {
             display: flex;
             flex-wrap: wrap;
@@ -70,6 +81,7 @@
             list-style: none;
         }
 
+        /* Individual time slot */
         .times-grid li {
             background: #e6f7ee;
             border: 1px solid #28A251;
@@ -80,6 +92,7 @@
             transition: all 0.2s ease;
         }
 
+        /* Time slot hover effects */
         .times-grid li:hover {
             background: #28A251;
             color: white;
@@ -87,6 +100,7 @@
             transform: translateY(-2px);
         }
 
+        /* Divide line */
         hr {
             margin: 40px 0;
             border: none;
@@ -94,12 +108,14 @@
             background: #ddd;
         }
 
+        /* User appointments list */
         .appointments-list {
             list-style: none;
             padding: 0;
             margin: 0;
         }
 
+        /* Individual appointment item */
         .appointments-list li {
             padding: 14px 18px;
             background: #f9f9f9;
@@ -114,8 +130,11 @@
 
 </head>
 
+<!-- Page title and JavaScript -->
 <head>
     <title>Appointments</title>
+    
+    <!-- Prevent weekend booking -->
     <script>
         function disableWeekends(event) {
             const day = new Date(event.target.value).getUTCDay();
@@ -127,6 +146,8 @@
     </script>
 </head>
 <body>
+
+    <!-- Navigation bar -->
     <nav class="navbar">
         <ul>
             <li><a href="/">Home</a></li>
@@ -139,13 +160,18 @@
         </ul>
     </nav>
 
+    <!-- Page heading -->
     <h1>Appointments</h1>
 
+    <!-- Main content container -->
     <div class="container">
+
+        <!-- Display feedback message -->
         {% if message %}
             <p style="color:green">{{ message }}</p>
         {% endif %}
-
+        
+        <!-- Doctor and date selection form -->
         <form method="GET" action="/appointment">
             <label for="doctor">Choose Doctor:</label>
             <select name="doctor" required>
@@ -164,6 +190,7 @@
 
         <hr>
 
+        <!-- Display available appointment times -->
         <h2>Available Times for {{ chosen_doctor }} on {{ chosen_date }}</h2>
         {% if available_times %}
             <ul class="times-grid">
@@ -177,7 +204,10 @@
 
         <hr>
 
+        <!-- Logged in user functionality -->
         {% if logged_in %}
+
+            <!-- Booking form -->
             <div style="text-align:center; margin-bottom:20px;">
                 <a href="/logout"><button type="button">Logout</button></a>
                 <a href="/password"><button type="button">Change Password</button></a>
@@ -201,6 +231,7 @@
 
             <hr>
 
+            <!-- User appointments list -->
             <h2>My Appointments</h2>
             {% if appointments %}
                 <ul class="appointments-list">
@@ -218,6 +249,8 @@
                 <p>You have no appointments booked.</p>
             {% endif %}
         {% else %}
+
+            <!-- Prompt to log in -->    
             <p style="text-align:center"><strong>Log in to book an appointment.</strong></p>
             <div style="text-align:center;">
                 <a href="/login?next=/appointment">
