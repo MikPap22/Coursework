@@ -54,6 +54,15 @@ def signup():
         con = sqlite3.connect("main.db", timeout=30)
         cur = con.cursor()
 
+        #Check if password is empty or username exists
+        if not request.form["password"]:
+            con.close()
+            return "Password cannot be empty!"
+        cur.execute("SELECT 1 FROM Users WHERE UserName=?", (request.form["username"],))
+        if cur.fetchone():
+            con.close()
+            return "Username already exists!"
+
         #Hash password with SHA-256 for security
         hash=hashlib.sha256(request.form["password"].encode()).hexdigest()
         
