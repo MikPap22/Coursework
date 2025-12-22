@@ -58,6 +58,9 @@ def signup():
         if not request.form["password"]:
             con.close()
             return "Password cannot be empty!"
+        if not request.form["useremail"]:
+            con.close()
+            return "Email cannot be empty!"
         cur.execute("SELECT 1 FROM Users WHERE UserName=?", (request.form["username"],))
         if cur.fetchone():
             con.close()
